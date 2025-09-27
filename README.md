@@ -1,75 +1,80 @@
-<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BrightWay - Innovación en Seguridad Vial</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
         }
 
         :root {
-            --primary-orange: #FF6B35;
-            --primary-yellow: #FFC107;
-            --dark-bg: #1a1a1a;
-            --darker-bg: #0d0d0d;
-            --text-light: #ffffff;
-            --text-gray: #b0b0b0;
-            --accent-blue: #2196F3;
-            --card-bg: rgba(255, 255, 255, 0.05);
-            --danger-red: #ff3838;
+            --primary: #FF6B35;
+            --primary-light: #FF8C42;
+            --accent: #FFC107;
+            --dark: #0A0A0A;
+            --darker: #000000;
+            --gray-900: #111111;
+            --gray-800: #1A1A1A;
+            --gray-700: #2A2A2A;
+            --gray-600: #404040;
+            --gray-400: #888888;
+            --gray-300: #CCCCCC;
+            --white: #FFFFFF;
+            --success: #10B981;
+            --danger: #EF4444;
+            --blue: #3B82F6;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: linear-gradient(135deg, var(--darker-bg) 0%, var(--dark-bg) 100%);
-            color: var(--text-light);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+            color: var(--white);
             min-height: 100vh;
-            overflow-x: hidden;
+            line-height: 1.6;
         }
 
         /* Loading Screen */
-        .loading-screen {
+        .loading {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100vh;
-            background: var(--darker-bg);
+            background: var(--darker);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 9999;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
         }
 
-        .loading-screen.hidden {
+        .loading.hidden {
             opacity: 0;
-            pointer-events: none;
+            visibility: hidden;
         }
 
-        .loader {
-            width: 60px;
-            height: 60px;
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
             border: 3px solid rgba(255, 107, 53, 0.1);
-            border-top-color: var(--primary-orange);
+            border-top: 3px solid var(--primary);
             border-radius: 50%;
             animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .loading-text {
-            margin-top: 2rem;
-            color: var(--text-gray);
-            font-size: 1rem;
+            color: var(--gray-400);
+            font-size: 0.9rem;
         }
 
         /* Navigation */
@@ -77,11 +82,10 @@
             position: fixed;
             top: 0;
             width: 100%;
-            background: rgba(26, 26, 26, 0.98);
-            backdrop-filter: blur(10px);
-            padding: 1rem 1.5rem;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             z-index: 1000;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
         }
 
         .nav-container {
@@ -90,375 +94,316 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 1rem 1.5rem;
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: var(--primary-orange);
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
         }
 
         .logo-icon {
-            width: 35px;
-            height: 35px;
-            background: linear-gradient(135deg, var(--primary-orange), var(--primary-yellow));
-            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            animation: pulse 2s ease infinite;
             font-size: 1.2rem;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
         }
 
         .nav-menu {
             display: flex;
-            gap: 1rem;
-            list-style: none;
+            gap: 0.5rem;
         }
 
-        .nav-item {
+        .nav-btn {
             background: none;
             border: none;
-            color: var(--text-gray);
-            cursor: pointer;
-            font-size: 0.95rem;
-            padding: 0.5rem 1rem;
+            color: var(--gray-400);
+            padding: 0.75rem 1rem;
             border-radius: 8px;
-            transition: all 0.3s ease;
-            position: relative;
-            white-space: nowrap;
-        }
-
-        .nav-item:hover {
-            color: var(--text-light);
-            background: rgba(255, 107, 53, 0.1);
-        }
-
-        .nav-item.active {
-            color: var(--primary-orange);
-        }
-
-        .nav-item.active::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 30px;
-            height: 3px;
-            background: var(--primary-orange);
-            border-radius: 2px;
-        }
-
-        .menu-toggle {
-            display: none;
-            background: none;
-            border: none;
-            color: var(--text-light);
-            font-size: 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
             cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            color: var(--white);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-btn.active {
+            color: var(--primary);
+            background: rgba(255, 107, 53, 0.1);
         }
 
         /* Main Content */
         main {
             padding-top: 70px;
-            min-height: 100vh;
         }
 
         .section {
             display: none;
-            animation: fadeIn 0.5s ease;
+            min-height: calc(100vh - 70px);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
         }
 
         .section.active {
             display: block;
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        @keyframes fadeIn {
-            from { 
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to { 
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
         }
 
         /* Hero Section */
         .hero {
-            padding: 3rem 1.5rem;
+            padding: 4rem 0;
             text-align: center;
-            max-width: 1200px;
-            margin: 0 auto;
         }
 
-        .hero h1 {
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, var(--primary-orange), var(--primary-yellow));
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: glow 2s ease infinite;
+            margin-bottom: 1rem;
+            line-height: 1.1;
         }
 
-        @keyframes glow {
-            0%, 100% { filter: brightness(1); }
-            50% { filter: brightness(1.2); }
-        }
-
-        .hero .tagline {
-            font-size: 1.2rem;
-            color: var(--text-gray);
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--gray-400);
             margin-bottom: 2rem;
+            font-weight: 400;
         }
 
         .hero-description {
-            max-width: 800px;
-            margin: 0 auto;
-            font-size: 1rem;
-            line-height: 1.8;
-            color: var(--text-gray);
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            font-size: 1.1rem;
+            color: var(--gray-300);
+            line-height: 1.7;
         }
 
-        /* 3D Product Visualization */
-        .product-visualization {
-            margin: 3rem auto;
-            max-width: 500px;
-            height: 350px;
+        /* Product Visualization */
+        .product-showcase {
+            margin: 3rem 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 400px;
+        }
+
+        .product-3d {
             position: relative;
+            width: 300px;
+            height: 400px;
             perspective: 1000px;
         }
 
-        .product-model {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            transform-style: preserve-3d;
-            animation: rotate3d 10s linear infinite;
-        }
-
-        @keyframes rotate3d {
-            from { transform: rotateY(0deg); }
-            to { transform: rotateY(360deg); }
-        }
-
         .trafitambo {
-            width: 120px;
-            height: 220px;
-            margin: 0 auto;
             position: relative;
+            width: 120px;
+            height: 250px;
+            margin: 0 auto;
             transform-style: preserve-3d;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotateY(0deg); }
+            33% { transform: translateY(-10px) rotateY(120deg); }
+            66% { transform: translateY(5px) rotateY(240deg); }
         }
 
         .trafitambo-body {
             width: 100%;
-            height: 180px;
-            background: linear-gradient(180deg, #FF6B35 0%, #FF8C42 50%, #FF6B35 100%);
-            border-radius: 10px;
-            position: absolute;
-            bottom: 0;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            height: 200px;
+            background: linear-gradient(180deg, var(--primary) 0%, var(--primary-light) 50%, var(--primary) 100%);
+            border-radius: 12px;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(255, 107, 53, 0.3);
         }
 
-        .trafitambo-stripes {
+        .reflective-stripe {
             position: absolute;
             width: 100%;
-            height: 25px;
-            background: white;
-            top: 40px;
+            height: 20px;
+            background: var(--white);
+            top: 60px;
             opacity: 0.9;
+            animation: shine 3s ease-in-out infinite;
         }
 
-        .trafitambo-stripes::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 25px;
-            background: white;
-            top: 50px;
+        @keyframes shine {
+            0%, 100% { opacity: 0.9; }
+            50% { opacity: 1; box-shadow: 0 0 20px rgba(255, 255, 255, 0.5); }
         }
 
         .solar-panel {
-            width: 100px;
-            height: 70px;
-            background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
             position: absolute;
-            top: -25px;
+            top: -30px;
             left: 50%;
             transform: translateX(-50%);
-            border: 2px solid #5c6bc0;
-            border-radius: 5px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            animation: panelTilt 4s ease infinite;
+            width: 80px;
+            height: 50px;
+            background: linear-gradient(135deg, #1E3A8A, #3B82F6);
+            border-radius: 8px;
+            border: 2px solid #60A5FA;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
         }
 
-        @keyframes panelTilt {
-            0%, 100% { transform: translateX(-50%) rotateX(0deg); }
-            50% { transform: translateX(-50%) rotateX(20deg); }
-        }
-
-        .solar-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-gap: 2px;
-            padding: 5px;
-            height: 100%;
-        }
-
-        .solar-cell {
-            background: #3f51b5;
-            border: 1px solid #7986cb;
-        }
-
-        .led-lights {
+        .led-strip {
             position: absolute;
             bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 10px;
+            gap: 8px;
         }
 
         .led {
             width: 8px;
             height: 8px;
-            background: var(--primary-yellow);
+            background: var(--accent);
             border-radius: 50%;
-            box-shadow: 0 0 15px var(--primary-yellow);
-            animation: blink 1s ease infinite;
+            box-shadow: 0 0 15px var(--accent);
+            animation: blink 2s ease-in-out infinite;
         }
 
+        .led:nth-child(2) { animation-delay: 0.5s; }
+        .led:nth-child(3) { animation-delay: 1s; }
+
         @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
+            0%, 50% { opacity: 1; }
+            25%, 75% { opacity: 0.3; }
         }
 
         /* Features */
         .features {
+            padding: 4rem 0;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            padding: 1.5rem;
-            max-width: 1200px;
-            margin: 0 auto;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
         }
 
         .feature-card {
-            background: var(--card-bg);
-            border: 1px solid rgba(255, 107, 53, 0.2);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 16px;
-            padding: 1.5rem;
+            padding: 2rem;
             transition: all 0.3s ease;
             backdrop-filter: blur(10px);
         }
 
         .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 40px rgba(255, 107, 53, 0.2);
-            border-color: var(--primary-orange);
+            transform: translateY(-8px);
+            border-color: rgba(255, 107, 53, 0.3);
+            box-shadow: 0 20px 60px rgba(255, 107, 53, 0.1);
         }
 
         .feature-icon {
-            width: 45px;
-            height: 45px;
-            background: linear-gradient(135deg, var(--primary-orange), var(--primary-yellow));
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 1rem;
-            font-size: 1.3rem;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
         }
 
-        .feature-card h3 {
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--white);
         }
 
-        .feature-card p {
-            font-size: 0.9rem;
-            color: var(--text-gray);
+        .feature-description {
+            color: var(--gray-400);
+            font-size: 0.95rem;
             line-height: 1.6;
         }
 
         /* Materials Section */
+        .materials {
+            padding: 4rem 0;
+        }
+
         .materials-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 1.5rem;
-            padding: 1.5rem;
-            max-width: 1200px;
-            margin: 0 auto;
+            margin-top: 2rem;
         }
 
         .material-card {
-            background: var(--card-bg);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
             padding: 1.5rem;
             transition: all 0.3s ease;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .material-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, var(--primary-orange), var(--primary-yellow));
-            transform: scaleX(0);
-            transition: transform 0.3s ease;
-        }
-
-        .material-card:hover::before {
-            transform: scaleX(1);
         }
 
         .material-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.2);
+            border-color: rgba(255, 107, 53, 0.3);
+            transform: translateY(-4px);
+        }
+
+        .material-header {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
         }
 
         .material-number {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: var(--primary-orange);
-            color: white;
-            width: 25px;
-            height: 25px;
+            background: var(--primary);
+            color: var(--white);
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.85rem;
-            font-weight: bold;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 1rem;
+            flex-shrink: 0;
         }
 
         .material-name {
             font-size: 1.1rem;
-            font-weight: bold;
+            font-weight: 600;
+            color: var(--white);
             margin-bottom: 0.5rem;
-            color: var(--primary-orange);
+            flex: 1;
         }
 
         .material-description {
-            color: var(--text-gray);
-            font-size: 0.85rem;
+            color: var(--gray-400);
+            font-size: 0.9rem;
             line-height: 1.5;
             margin-bottom: 1rem;
         }
@@ -467,393 +412,407 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-top: 0.75rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .material-price {
-            color: var(--primary-yellow);
-            font-weight: bold;
-            font-size: 0.9rem;
+            color: var(--accent);
+            font-weight: 600;
         }
 
         .material-quantity {
-            color: var(--text-gray);
+            color: var(--gray-400);
             font-size: 0.85rem;
         }
 
-        /* Game Section */
-        .game-container {
-            max-width: 900px;
-            margin: 1rem auto;
-            padding: 1.5rem;
+        /* Enhanced Game Section - From brightway_game_only.html */
+        .game {
+            padding: 4rem 0;
+            text-align: center;
         }
 
-        .game-header {
-            text-align: center;
-            margin-bottom: 1.5rem;
+        .game-container {
+            max-width: 900px;
+            width: 100%;
         }
 
         .game-stats {
             display: flex;
-            justify-content: space-around;
-            max-width: 400px;
-            margin: 1rem auto;
-            padding: 1rem;
-            background: var(--card-bg);
-            border-radius: 12px;
-            border: 1px solid rgba(255, 107, 53, 0.2);
+            justify-content: center;
+            gap: 3rem;
+            margin: 2rem 0;
         }
 
-        .stat-item {
+        .stat {
             text-align: center;
         }
 
         .stat-label {
-            color: var(--text-gray);
-            font-size: 0.85rem;
-            margin-bottom: 0.25rem;
+            color: var(--gray-400);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
         }
 
         .stat-value {
-            color: var(--primary-yellow);
-            font-size: 1.5rem;
-            font-weight: bold;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
         }
 
         .game-canvas {
+            position: relative;
             width: 100%;
             max-width: 800px;
-            height: 450px;
-            margin: 0 auto;
-            background: linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 100%);
-            border: 2px solid var(--primary-orange);
-            border-radius: 16px;
-            position: relative;
+            height: 600px;
+            margin: 2rem auto;
+            background: var(--darker);
+            border-radius: 20px;
             overflow: hidden;
-            cursor: pointer;
-            touch-action: none;
+            border: 3px solid var(--gray-600);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
         }
 
+        /* Road - Top Down View */
         .road {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 120px;
-            background: linear-gradient(180deg, #333 0%, #222 100%);
-            border-top: 2px solid #555;
-        }
-
-        .road-line {
-            position: absolute;
-            bottom: 55px;
-            width: 100%;
-            height: 4px;
-            background: repeating-linear-gradient(
-                90deg,
-                #fff 0px,
-                #fff 30px,
-                transparent 30px,
-                transparent 60px
-            );
-            animation: roadMove 1s linear infinite;
-        }
-
-        @keyframes roadMove {
-            from { transform: translateX(0); }
-            to { transform: translateX(-60px); }
-        }
-
-        .car {
-            position: absolute;
-            bottom: 80px;
-            left: 100px;
-            width: 70px;
-            height: 35px;
-            background: linear-gradient(90deg, #2196F3 0%, #1976D2 100%);
-            border-radius: 10px 20px 5px 5px;
-            transition: left 0.2s ease, bottom 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            z-index: 10;
-        }
-
-        .car::before {
-            content: '';
-            position: absolute;
-            top: -12px;
-            left: 12px;
-            width: 35px;
-            height: 18px;
-            background: rgba(33, 150, 243, 0.3);
-            border-radius: 5px 5px 0 0;
-        }
-
-        .car.jumping {
-            animation: jump 0.5s ease;
-        }
-
-        @keyframes jump {
-            0%, 100% { bottom: 80px; }
-            50% { bottom: 150px; }
-        }
-
-        .car.crashed {
-            background: linear-gradient(90deg, var(--danger-red) 0%, #cc0000 100%);
-            animation: crash 0.5s ease;
-        }
-
-        @keyframes crash {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(-5deg); }
-            75% { transform: rotate(5deg); }
-        }
-
-        .car-lights {
-            position: absolute;
-            right: -15px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 30px;
-            height: 15px;
-            background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 70%);
-            opacity: 0.3;
-            transition: all 0.3s ease;
-        }
-
-        .obstacle {
-            position: absolute;
-            bottom: 80px;
-            width: 50px;
-            height: 40px;
-            background: linear-gradient(135deg, #666 0%, #444 100%);
-            border-radius: 5px;
-            box-shadow: 0 5px 10px rgba(0,0,0,0.5);
-            animation: moveLeft 3s linear;
-        }
-
-        @keyframes moveLeft {
-            from { right: -60px; }
-            to { right: 100%; }
-        }
-
-        .obstacle.rock {
-            background: radial-gradient(circle, #8b7355 0%, #5c4a3a 100%);
-            border-radius: 40% 60% 70% 30% / 60% 40% 60% 40%;
-            height: 35px;
-        }
-
-        .obstacle.barrier {
-            background: repeating-linear-gradient(
-                45deg,
-                #ff9800,
-                #ff9800 10px,
-                #fff 10px,
-                #fff 20px
-            );
-            height: 45px;
-            border: 2px solid #ff6600;
-        }
-
-        .brightway-game {
-            position: absolute;
-            right: 200px;
-            bottom: 130px;
-            width: 50px;
-            height: 90px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            z-index: 5;
-        }
-
-        .brightway-game-body {
-            width: 35px;
-            height: 65px;
-            background: linear-gradient(180deg, var(--primary-orange) 0%, #ff8c42 100%);
-            border-radius: 5px;
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            box-shadow: 0 5px 10px rgba(0,0,0,0.3);
-        }
-
-        .brightway-game-panel {
-            width: 30px;
-            height: 20px;
-            background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
             position: absolute;
             top: 0;
             left: 50%;
             transform: translateX(-50%);
-            border: 2px solid #3949ab;
-            border-radius: 3px;
+            width: 350px;
+            height: 100%;
+            background: linear-gradient(0deg, #333333 0%, #222222 100%);
+            border-left: 3px solid var(--white);
+            border-right: 3px solid var(--white);
         }
 
-        .brightway-light {
+        .road-markings {
             position: absolute;
-            top: -40px;
+            top: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 150px;
-            height: 150px;
-            background: radial-gradient(circle, rgba(255,193,7,0.7) 0%, transparent 70%);
-            opacity: 0;
-            transition: opacity 0.5s ease;
-            pointer-events: none;
+            width: 6px;
+            height: 100%;
+            background: repeating-linear-gradient(
+                to bottom,
+                var(--white) 0px,
+                var(--white) 30px,
+                transparent 30px,
+                transparent 60px
+            );
+            animation: roadMove 2s linear infinite;
         }
 
-        .brightway-light.active {
-            opacity: 1;
-            animation: lightPulse 2s ease infinite;
+        @keyframes roadMove {
+            0% { transform: translateX(-50%) translateY(0); }
+            100% { transform: translateX(-50%) translateY(60px); }
         }
 
-        @keyframes lightPulse {
-            0%, 100% { transform: translateX(-50%) scale(1); }
-            50% { transform: translateX(-50%) scale(1.1); }
+        /* Car - Top Down View */
+        .car {
+            position: absolute;
+            bottom: 80px;
+            left: 35%;
+            width: 50px;
+            height: 90px;
+            background: linear-gradient(0deg, var(--blue), #1E40AF);
+            border-radius: 20px 20px 10px 10px;
+            transition: left 0.3s ease;
+            z-index: 10;
+            transform: translateX(-50%);
+            box-shadow: 0 5px 20px rgba(59, 130, 246, 0.4);
         }
 
-        .game-controls {
-            text-align: center;
-            margin-top: 1.5rem;
+        .car.lane-right {
+            left: 65%;
         }
 
-        .game-btn {
-            background: linear-gradient(135deg, var(--primary-orange), var(--primary-yellow));
-            color: white;
-            border: none;
-            padding: 0.8rem 2rem;
-            border-radius: 50px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
+        /* Car Details - Top View */
+        .car::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 35px;
+            height: 45px;
+            background: rgba(59, 130, 246, 0.3);
+            border-radius: 15px;
+            border: 2px solid rgba(59, 130, 246, 0.6);
+        }
+
+        .car::after {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 25px;
+            height: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 8px 8px 0 0;
+        }
+
+        .car-lights {
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 20px;
+            background: radial-gradient(ellipse, rgba(255, 255, 255, 0.8) 0%, transparent 70%);
+            border-radius: 50%;
+            opacity: 0.4;
             transition: all 0.3s ease;
-            box-shadow: 0 5px 20px rgba(255, 107, 53, 0.3);
-            margin: 0 0.5rem;
         }
 
-        .game-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(255, 107, 53, 0.4);
+        /* Obstacles - Top Down View */
+        .obstacle {
+            position: absolute;
+            top: -60px;
+            width: 50px;
+            height: 80px;
+            background: var(--gray-600);
+            border-radius: 12px 12px 6px 6px;
+            transform: translateX(-50%);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
         }
 
-        .game-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
+        .obstacle.lane-left {
+            left: 35%;
         }
 
-        .game-instructions {
-            margin-top: 1rem;
-            padding: 1rem;
-            background: var(--card-bg);
-            border-radius: 12px;
-            border: 1px solid rgba(255, 107, 53, 0.1);
+        .obstacle.lane-right {
+            left: 65%;
         }
 
-        .game-instructions h4 {
-            color: var(--primary-orange);
-            margin-bottom: 0.5rem;
+        .obstacle::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 35px;
+            height: 40px;
+            background: rgba(64, 64, 64, 0.8);
+            border-radius: 8px;
         }
 
-        .game-instructions p {
-            color: var(--text-gray);
-            font-size: 0.9rem;
-            line-height: 1.5;
-            margin-bottom: 0.5rem;
-        }
-
-        .control-buttons {
-            display: none;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 0.5rem;
-            max-width: 250px;
-            margin: 1rem auto;
-        }
-
-        .control-btn {
-            background: var(--card-bg);
-            border: 1px solid var(--primary-orange);
-            color: var(--primary-orange);
-            padding: 1rem;
-            border-radius: 12px;
-            font-size: 1.5rem;
+        /* BrightWay Post */
+        .brightway-post {
+            position: absolute;
+            right: 60px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 100px;
             cursor: pointer;
-            transition: all 0.2s ease;
-            user-select: none;
+            z-index: 5;
+            transition: all 0.3s ease;
         }
 
-        .control-btn:active {
-            background: rgba(255, 107, 53, 0.2);
-            transform: scale(0.95);
+        .brightway-post:hover {
+            transform: translateY(-50%) scale(1.1);
         }
 
-        .game-over-modal {
-            display: none;
+        .brightway-body {
+            width: 40px;
+            height: 80px;
+            background: linear-gradient(180deg, var(--primary), var(--primary-light));
+            border-radius: 8px;
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 5px 20px rgba(255, 107, 53, 0.4);
+        }
+
+        .brightway-panel {
+            width: 35px;
+            height: 20px;
+            background: linear-gradient(135deg, #1E3A8A, #3B82F6);
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 6px;
+            box-shadow: 0 3px 10px rgba(59, 130, 246, 0.5);
+        }
+
+        .light-effect {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(26, 26, 26, 0.95);
-            padding: 2rem;
-            border-radius: 16px;
-            border: 2px solid var(--primary-orange);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 193, 7, 0.3) 0%, transparent 60%);
+            border-radius: 50%;
+            opacity: 0;
+            transition: all 0.5s ease;
+            pointer-events: none;
+        }
+
+        .light-effect.active {
+            opacity: 1;
+            animation: lightPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes lightPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.2); }
+        }
+
+        /* Game Controls */
+        .game-controls {
+            margin: 2rem 0;
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: var(--white);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 140px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Mobile Controls */
+        .mobile-controls {
+            display: none;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1rem;
+            max-width: 400px;
+            margin: 2rem auto;
+        }
+
+        .control-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 107, 53, 0.4);
+            color: var(--primary);
+            padding: 1.5rem;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .control-btn:active {
+            background: rgba(255, 107, 53, 0.3);
+            transform: scale(0.95);
+        }
+
+        /* Game Over Modal */
+        .game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(10, 10, 10, 0.95);
+            padding: 3rem;
+            border-radius: 20px;
+            border: 3px solid var(--primary);
             text-align: center;
+            display: none;
             z-index: 100;
             backdrop-filter: blur(10px);
         }
 
-        .game-over-modal.show {
+        .game-over.show {
             display: block;
-            animation: modalAppear 0.3s ease;
+            animation: fadeInScale 0.4s ease;
         }
 
-        @keyframes modalAppear {
-            from { 
-                opacity: 0;
-                transform: translate(-50%, -50%) scale(0.8);
-            }
-            to { 
-                opacity: 1;
-                transform: translate(-50%, -50%) scale(1);
-            }
+        @keyframes fadeInScale {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+            100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
         }
 
-        .game-over-modal h3 {
-            color: var(--primary-orange);
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .final-score {
+        .game-over h3 {
+            color: var(--primary);
             font-size: 2rem;
-            color: var(--primary-yellow);
-            font-weight: bold;
-            margin-bottom: 1rem;
-        }
-
-        /* Footer */
-        .footer {
-            margin-top: 3rem;
-            padding: 2rem 1.5rem;
-            text-align: center;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(13, 13, 13, 0.5);
-        }
-
-        .company-info {
             margin-bottom: 1.5rem;
         }
 
-        .company-logo {
-            display: inline-flex;
+        .final-score {
+            font-size: 3rem;
+            color: var(--accent);
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+
+        /* Instructions */
+        .instructions {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+            text-align: left;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .instructions h4 {
+            color: var(--primary);
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .instructions p {
+            color: var(--gray-400);
+            font-size: 1rem;
+            margin-bottom: 0.8rem;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 0 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+            color: var(--gray-400);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .footer-logo {
+            display: flex;
+            justify-content: center;
             align-items: center;
             gap: 0.5rem;
             margin-bottom: 1rem;
         }
 
-        .company-name {
-            font-size: 1.2rem;
-            font-weight: bold;
-            background: linear-gradient(135deg, var(--primary-orange), var(--primary-yellow));
+        .footer-logo .company-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -861,140 +820,133 @@
 
         .creators {
             margin: 1rem 0;
-            color: var(--text-gray);
             font-size: 0.9rem;
         }
 
-        .creators span {
-            color: var(--primary-orange);
-            font-weight: bold;
+        .creators strong {
+            color: var(--primary);
         }
 
         .university {
-            color: var(--text-gray);
             font-size: 0.85rem;
-            margin-top: 0.5rem;
+            margin-bottom: 1rem;
         }
 
         .copyright {
-            color: var(--text-gray);
             font-size: 0.8rem;
-            margin-top: 1rem;
             padding-top: 1rem;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* Mobile Responsive */
+        /* Responsive Design */
         @media (max-width: 768px) {
-            nav {
-                padding: 0.8rem 1rem;
+            .nav-container {
+                padding: 0.75rem 1rem;
             }
 
             .logo {
-                font-size: 1.1rem;
-            }
-
-            .logo-icon {
-                width: 30px;
-                height: 30px;
+                font-size: 1.25rem;
             }
 
             .nav-menu {
-                gap: 0.5rem;
+                gap: 0.25rem;
             }
 
-            .nav-item {
-                font-size: 0.85rem;
-                padding: 0.4rem 0.7rem;
+            .nav-btn {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.8rem;
             }
 
-            .hero h1 {
-                font-size: 2rem;
+            .hero {
+                padding: 3rem 0;
             }
 
-            .hero .tagline {
-                font-size: 1rem;
+            .hero-title {
+                font-size: 2.5rem;
             }
 
-            .product-visualization {
-                height: 300px;
-            }
-
-            .trafitambo {
-                width: 100px;
-                height: 180px;
-            }
-
-            .features {
+            .features-grid {
                 grid-template-columns: 1fr;
-                gap: 1rem;
+                gap: 1.5rem;
             }
 
             .materials-grid {
                 grid-template-columns: 1fr;
-                gap: 1rem;
             }
 
             .game-canvas {
-                height: 350px;
+                height: 500px;
+                max-width: 90vw;
             }
 
-            .control-buttons {
+            .road {
+                width: 280px;
+            }
+
+            .mobile-controls {
                 display: grid;
             }
 
-            .game-instructions p {
-                font-size: 0.85rem;
+            .game-stats {
+                gap: 2rem;
             }
 
-            .obstacle {
+            .car, .obstacle {
                 width: 40px;
-                height: 35px;
+                height: 70px;
             }
 
-            .car {
-                width: 60px;
-                height: 30px;
+            .car.lane-left {
+                left: 38%;
+            }
+
+            .car.lane-right {
+                left: 62%;
+            }
+
+            .obstacle.lane-left {
+                left: 38%;
+            }
+
+            .obstacle.lane-right {
+                left: 62%;
             }
         }
 
         @media (max-width: 480px) {
-            .nav-item span {
-                display: none;
+            .container {
+                padding: 0 1rem;
             }
 
-            .nav-item::before {
-                font-size: 1.2rem;
+            .hero-title {
+                font-size: 2rem;
             }
 
-            .nav-item:nth-child(1)::before { content: "🏠"; }
-            .nav-item:nth-child(2)::before { content: "🔧"; }
-            .nav-item:nth-child(3)::before { content: "🎮"; }
-
-            .hero {
-                padding: 2rem 1rem;
+            .product-3d {
+                width: 250px;
+                height: 320px;
             }
 
             .game-canvas {
-                height: 300px;
+                height: 450px;
             }
 
-            .game-stats {
-                flex-direction: row;
-                padding: 0.75rem;
+            .road {
+                width: 250px;
             }
 
-            .stat-value {
-                font-size: 1.2rem;
+            .car, .obstacle {
+                width: 35px;
+                height: 60px;
             }
         }
     </style>
 </head>
 <body>
     <!-- Loading Screen -->
-    <div class="loading-screen" id="loadingScreen">
-        <div class="loader"></div>
-        <p class="loading-text">Cargando BrightWay...</p>
+    <div class="loading" id="loading">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Cargando BrightWay...</div>
     </div>
 
     <!-- Navigation -->
@@ -1002,18 +954,12 @@
         <div class="nav-container">
             <div class="logo">
                 <div class="logo-icon">💡</div>
-                <span>BrightWay</span>
+                BrightWay
             </div>
-            <div class="nav-menu" id="navMenu">
-                <button class="nav-item active" data-section="description">
-                    <span>Descripción</span>
-                </button>
-                <button class="nav-item" data-section="materials">
-                    <span>Materiales</span>
-                </button>
-                <button class="nav-item" data-section="game">
-                    <span>Minijuego</span>
-                </button>
+            <div class="nav-menu">
+                <button class="nav-btn active" data-section="description">Descripción</button>
+                <button class="nav-btn" data-section="materials">Materiales</button>
+                <button class="nav-btn" data-section="game">Minijuego</button>
             </div>
         </div>
     </nav>
@@ -1022,166 +968,156 @@
     <main>
         <!-- Description Section -->
         <section id="description" class="section active">
-            <div class="hero">
-                <h1>BrightWay</h1>
-                <p class="tagline">Dale luz a tu camino</p>
-                <p class="hero-description">
-                    BrightWay vela por tu seguridad al implementar tecnologías modernas y buenas para el ambiente. 
-                    Un innovador sistema de señalización vial que combina un trafitambo tradicional con tecnología 
-                    solar avanzada, proporcionando iluminación autónoma y sostenible para mejorar la seguridad vial.
-                </p>
-            </div>
+            <div class="container">
+                <div class="hero">
+                    <h1 class="hero-title">BrightWay</h1>
+                    <p class="hero-subtitle">Dale luz a tu camino</p>
+                    <p class="hero-description">
+                        BrightWay vela por tu seguridad al implementar tecnologías modernas y buenas para el ambiente. 
+                        Un innovador sistema de señalización vial que combina un trafitambo tradicional con tecnología 
+                        solar avanzada, proporcionando iluminación autónoma y sostenible para mejorar la seguridad vial.
+                    </p>
+                </div>
 
-            <!-- 3D Product Visualization -->
-            <div class="product-visualization">
-                <div class="product-model">
-                    <div class="trafitambo">
-                        <div class="solar-panel">
-                            <div class="solar-grid">
-                                <div class="solar-cell"></div>
-                                <div class="solar-cell"></div>
-                                <div class="solar-cell"></div>
-                                <div class="solar-cell"></div>
-                                <div class="solar-cell"></div>
-                                <div class="solar-cell"></div>
-                                <div class="solar-cell"></div>
-                                <div class="solar-cell"></div>
-                                <div class="solar-cell"></div>
-                                <div class="solar-cell"></div>
-                                <div class="solar-cell"></div>
-                                <div class="solar-cell"></div>
-                            </div>
-                        </div>
-                        <div class="trafitambo-body">
-                            <div class="trafitambo-stripes"></div>
-                            <div class="led-lights">
-                                <div class="led"></div>
-                                <div class="led"></div>
-                                <div class="led"></div>
+                <div class="product-showcase">
+                    <div class="product-3d">
+                        <div class="trafitambo">
+                            <div class="solar-panel"></div>
+                            <div class="trafitambo-body">
+                                <div class="reflective-stripe"></div>
+                                <div class="led-strip">
+                                    <div class="led"></div>
+                                    <div class="led"></div>
+                                    <div class="led"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Features -->
             <div class="features">
-                <div class="feature-card">
-                    <div class="feature-icon">☀️</div>
-                    <h3>Energía Solar</h3>
-                    <p>Panel solar móvil con servomotores para optimizar la captación de energía durante todo el día.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">💡</div>
-                    <h3>Iluminación LED</h3>
-                    <p>Sistema de LEDs de alta eficiencia con sensor de movimiento para máxima visibilidad nocturna.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🌱</div>
-                    <h3>Eco-Amigable</h3>
-                    <p>Tecnología 100% sustentable que no requiere conexión eléctrica externa.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔧</div>
-                    <h3>Arduino Nano</h3>
-                    <p>Control inteligente mediante microcontrolador para gestión automática del sistema.</p>
+                <div class="container">
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">☀️</div>
+                            <h3 class="feature-title">Energía Solar</h3>
+                            <p class="feature-description">Panel solar móvil con servomotores para optimizar la captación de energía durante todo el día.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">💡</div>
+                            <h3 class="feature-title">Iluminación LED</h3>
+                            <p class="feature-description">Sistema de LEDs de alta eficiencia con sensor de movimiento para máxima visibilidad nocturna.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">🌱</div>
+                            <h3 class="feature-title">Eco-Amigable</h3>
+                            <p class="feature-description">Tecnología 100% sustentable que no requiere conexión eléctrica externa.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">🔧</div>
+                            <h3 class="feature-title">Arduino Nano</h3>
+                            <p class="feature-description">Control inteligente mediante microcontrolador para gestión automática del sistema.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- Materials Section -->
         <section id="materials" class="section">
-            <div class="hero">
-                <h1>Materiales</h1>
-                <p class="tagline">Componentes del Sistema BrightWay</p>
-            </div>
-            
-            <div class="materials-grid" id="materialsGrid">
-                <!-- Materials will be dynamically loaded here -->
+            <div class="container">
+                <div class="hero">
+                    <h1 class="hero-title">Materiales</h1>
+                    <p class="hero-subtitle">Componentes del Sistema BrightWay</p>
+                </div>
+                
+                <div class="materials-grid" id="materialsGrid">
+                    <!-- Materials will be loaded dynamically -->
+                </div>
             </div>
         </section>
 
-        <!-- Game Section -->
+        <!-- Enhanced Game Section -->
         <section id="game" class="section">
-            <div class="game-container">
-                <div class="game-header">
-                    <h1>Minijuego BrightWay</h1>
-                    <p class="tagline">Esquiva obstáculos y activa el BrightWay</p>
-                </div>
+            <div class="container">
+                <div class="game">
+                    <div class="game-container">
+                        <h1 class="hero-title">BrightWay</h1>
+                        <p class="hero-subtitle">Conduce en la oscuridad y activa el BrightWay</p>
 
-                <div class="game-stats">
-                    <div class="stat-item">
-                        <div class="stat-label">Puntos</div>
-                        <div class="stat-value" id="score">0</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-label">Record</div>
-                        <div class="stat-value" id="highScore">0</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-label">Vidas</div>
-                        <div class="stat-value" id="lives">3</div>
-                    </div>
-                </div>
-                
-                <div class="game-canvas" id="gameCanvas">
-                    <div class="road">
-                        <div class="road-line"></div>
-                    </div>
-                    <div class="car" id="car">
-                        <div class="car-lights" id="carLights"></div>
-                    </div>
-                    <div class="brightway-game" id="brightwayGame">
-                        <div class="brightway-game-body"></div>
-                        <div class="brightway-game-panel"></div>
-                        <div class="brightway-light" id="brightwayLight"></div>
-                    </div>
-                    <div class="game-over-modal" id="gameOverModal">
-                        <h3>¡Juego Terminado!</h3>
-                        <div class="final-score">Puntuación: <span id="finalScore">0</span></div>
-                        <button class="game-btn" onclick="resetGame()">Jugar de Nuevo</button>
-                    </div>
-                </div>
+                        <div class="game-stats">
+                            <div class="stat">
+                                <div class="stat-label">Puntos</div>
+                                <div class="stat-value" id="score">0</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-label">Récord</div>
+                                <div class="stat-value" id="highScore">0</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-label">Vidas</div>
+                                <div class="stat-value" id="lives">3</div>
+                            </div>
+                        </div>
+                        
+                        <div class="game-canvas" id="gameCanvas">
+                            <div class="road">
+                                <div class="road-markings"></div>
+                            </div>
+                            <div class="car" id="car">
+                                <div class="car-lights" id="carLights"></div>
+                            </div>
+                            <div class="brightway-post" id="brightwayPost">
+                                <div class="brightway-body"></div>
+                                <div class="brightway-panel"></div>
+                                <div class="light-effect" id="lightEffect"></div>
+                            </div>
+                            <div class="game-over" id="gameOver">
+                                <h3>¡Juego Terminado!</h3>
+                                <div class="final-score">Puntuación: <span id="finalScore">0</span></div>
+                                <button class="btn" onclick="resetGame()">Jugar de Nuevo</button>
+                            </div>
+                        </div>
 
-                <div class="control-buttons">
-                    <div></div>
-                    <button class="control-btn" id="jumpBtn">⬆️</button>
-                    <div></div>
-                    <button class="control-btn" id="leftBtn">⬅️</button>
-                    <button class="control-btn" id="lightBtn">💡</button>
-                    <button class="control-btn" id="rightBtn">➡️</button>
-                </div>
-                
-                <div class="game-controls">
-                    <button class="game-btn" id="startGame">Iniciar Juego</button>
-                    <button class="game-btn" id="pauseGame" disabled>Pausar</button>
-                </div>
+                        <div class="mobile-controls" id="mobileControls">
+                            <button class="control-btn" id="leftBtn">← Izq</button>
+                            <button class="control-btn" id="lightBtn">💡 Luz</button>
+                            <button class="control-btn" id="rightBtn">Der →</button>
+                        </div>
+                        
+                        <div class="game-controls">
+                            <button class="btn" id="startBtn">Iniciar Juego</button>
+                            <button class="btn btn-secondary" id="pauseBtn" disabled>Pausar</button>
+                        </div>
 
-                <div class="game-instructions">
-                    <h4>Cómo Jugar:</h4>
-                    <p>🎯 <strong>Objetivo:</strong> Esquiva los obstáculos y activa el BrightWay para iluminar el camino</p>
-                    <p>⌨️ <strong>Controles PC:</strong> Flechas ← → para mover, ↑ para saltar, Espacio para activar BrightWay</p>
-                    <p>📱 <strong>Controles Móvil:</strong> Usa los botones en pantalla</p>
-                    <p>💡 <strong>Tip:</strong> Activa el BrightWay para ganar puntos extra y ver mejor los obstáculos</p>
+                        <div class="instructions">
+                            <h4>Cómo Jugar:</h4>
+                            <p><strong>Objetivo:</strong> Conduce tu auto esquivando obstáculos que caen desde arriba y activa el BrightWay para iluminar el camino.</p>
+                            <p><strong>Controles PC:</strong> Flechas ← → para cambiar de carril, Espacio para activar BrightWay</p>
+                            <p><strong>Controles Móvil:</strong> Usa los botones en pantalla</p>
+                            <p><strong>Puntuación:</strong> Ganas puntos por tiempo y por activar el BrightWay. ¡La luz te ayuda a ver mejor!</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
     </main>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="company-info">
-            <div class="company-logo">
+    <footer>
+        <div class="container">
+            <div class="footer-logo">
                 <div class="logo-icon">💡</div>
                 <span class="company-name">BrightWay Technologies</span>
             </div>
             <div class="creators">
-                Desarrollado por: <span>Pablo Nicolás García Huerta</span> y <span>Ángel Antonio Ruiz García</span>
+                Desarrollado por: <strong>Pablo Nicolás García Huerta</strong> y <strong>Ángel Antonio Ruiz García</strong>
             </div>
             <div class="university">Universidad Autónoma de Querétaro - Facultad de Ingeniería</div>
-        </div>
-        <div class="copyright">
-            © 2024 BrightWay Technologies. Todos los derechos reservados. | Innovación en Seguridad Vial
+            <div class="copyright">
+                © 2024 BrightWay Technologies. Todos los derechos reservados.
+            </div>
         </div>
     </footer>
 
@@ -1274,44 +1210,66 @@
             }
         ];
 
-        // Loading Screen
-        window.addEventListener('load', () => {
+        // App Initialization
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hide loading screen
             setTimeout(() => {
-                document.getElementById('loadingScreen').classList.add('hidden');
+                document.getElementById('loading').classList.add('hidden');
             }, 1500);
+
+            // Load materials
+            loadMaterials();
+            
+            // Initialize navigation
+            initNavigation();
+            
+            // Initialize game
+            initGame();
+
+            // Show mobile controls on mobile devices
+            if (window.innerWidth <= 768) {
+                document.getElementById('mobileControls').style.display = 'grid';
+            }
         });
 
-        // Navigation
-        const navItems = document.querySelectorAll('.nav-item');
-        const sections = document.querySelectorAll('.section');
+        // Navigation System
+        function initNavigation() {
+            const navBtns = document.querySelectorAll('.nav-btn');
+            const sections = document.querySelectorAll('.section');
 
-        navItems.forEach(item => {
-            item.addEventListener('click', () => {
-                const targetSection = item.dataset.section;
-                
-                navItems.forEach(navItem => navItem.classList.remove('active'));
-                item.classList.add('active');
-                
-                sections.forEach(section => section.classList.remove('active'));
-                document.getElementById(targetSection).classList.add('active');
-
-                if (targetSection === 'game') {
-                    initGame();
-                }
+            navBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const targetSection = btn.dataset.section;
+                    
+                    // Update nav active state
+                    navBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    // Update section visibility
+                    sections.forEach(section => {
+                        section.classList.remove('active');
+                        if (section.id === targetSection) {
+                            setTimeout(() => section.classList.add('active'), 50);
+                        }
+                    });
+                });
             });
-        });
+        }
 
         // Load Materials
         function loadMaterials() {
             const materialsGrid = document.getElementById('materialsGrid');
-            if (!materialsGrid) return;
             
             materials.forEach(material => {
                 const card = document.createElement('div');
                 card.className = 'material-card';
                 card.innerHTML = `
-                    <div class="material-number">${material.id}</div>
-                    <h3 class="material-name">${material.name}</h3>
+                    <div class="material-header">
+                        <div class="material-number">${material.id}</div>
+                        <div>
+                            <h3 class="material-name">${material.name}</h3>
+                        </div>
+                    </div>
                     <p class="material-description">${material.description}</p>
                     <div class="material-footer">
                         <span class="material-price">${material.price}</span>
@@ -1322,114 +1280,136 @@
             });
         }
 
-        loadMaterials();
+        // Enhanced Game Variables - From brightway_game_only.html
+        let gameState = {
+            running: false,
+            paused: false,
+            score: 0,
+            lives: 3,
+            highScore: 0,
+            carLane: 'left', // 'left' or 'right'
+            brightwayActive: false,
+            obstacles: [],
+            gameSpeed: 3,
+            obstacleSpawnRate: 100,
+            frameCounter: 0
+        };
 
-        // Game Variables
-        let gameRunning = false;
-        let gamePaused = false;
-        let score = 0;
-        let highScore = parseInt(localStorage?.getItem('brightwayHighScore') || '0');
-        let lives = 3;
-        let carPosition = 100;
-        let carLane = 1; // 0: top, 1: middle, 2: bottom
-        let brightwayActivated = false;
-        let obstacles = [];
-        let gameSpeed = 5;
-        let obstacleSpawnTimer = 0;
-        let gameLoop;
-        let isJumping = false;
+        let gameElements = {};
+        let gameLoop = null;
 
-        // Game Elements
-        const car = document.getElementById('car');
-        const carLights = document.getElementById('carLights');
-        const brightwayGame = document.getElementById('brightwayGame');
-        const brightwayLight = document.getElementById('brightwayLight');
-        const scoreElement = document.getElementById('score');
-        const highScoreElement = document.getElementById('highScore');
-        const livesElement = document.getElementById('lives');
-        const gameCanvas = document.getElementById('gameCanvas');
-        const gameOverModal = document.getElementById('gameOverModal');
-        const finalScoreElement = document.getElementById('finalScore');
-        const startBtn = document.getElementById('startGame');
-        const pauseBtn = document.getElementById('pauseGame');
-
-        // Initialize high score display
-        highScoreElement.textContent = highScore;
-
+        // Enhanced Game Initialization
         function initGame() {
-            if (!gameRunning) {
-                carPosition = 100;
-                car.style.left = carPosition + 'px';
+            gameElements = {
+                car: document.getElementById('car'),
+                carLights: document.getElementById('carLights'),
+                brightwayPost: document.getElementById('brightwayPost'),
+                lightEffect: document.getElementById('lightEffect'),
+                gameCanvas: document.getElementById('gameCanvas'),
+                gameOver: document.getElementById('gameOver'),
+                score: document.getElementById('score'),
+                lives: document.getElementById('lives'),
+                highScore: document.getElementById('highScore'),
+                finalScore: document.getElementById('finalScore'),
+                startBtn: document.getElementById('startBtn'),
+                pauseBtn: document.getElementById('pauseBtn')
+            };
+
+            gameState.highScore = 0;
+            gameElements.highScore.textContent = gameState.highScore;
+
+            setupEventListeners();
+        }
+
+        function setupEventListeners() {
+            // Keyboard controls
+            document.addEventListener('keydown', handleKeyDown);
+            
+            // Button controls
+            gameElements.startBtn.addEventListener('click', startGame);
+            gameElements.pauseBtn.addEventListener('click', togglePause);
+            
+            // Mobile controls
+            document.getElementById('leftBtn').addEventListener('click', () => changeLane('left'));
+            document.getElementById('rightBtn').addEventListener('click', () => changeLane('right'));
+            document.getElementById('lightBtn').addEventListener('click', () => activateBrightWay());
+            
+            // Click on BrightWay post
+            gameElements.brightwayPost.addEventListener('click', activateBrightWay);
+        }
+
+        function handleKeyDown(e) {
+            if (!gameState.running || gameState.paused) return;
+            
+            switch(e.key) {
+                case 'ArrowLeft':
+                    e.preventDefault();
+                    changeLane('left');
+                    break;
+                case 'ArrowRight':
+                    e.preventDefault();
+                    changeLane('right');
+                    break;
+                case ' ':
+                    e.preventDefault();
+                    activateBrightWay();
+                    break;
             }
         }
 
         function startGame() {
-            if (gameRunning) return;
+            if (gameState.running) {
+                resetGame();
+                return;
+            }
+
+            gameState = {
+                ...gameState,
+                running: true,
+                paused: false,
+                score: 0,
+                lives: 3,
+                carLane: 'left',
+                brightwayActive: false,
+                obstacles: [],
+                gameSpeed: 3,
+                obstacleSpawnRate: 100,
+                frameCounter: 0
+            };
+
+            updateUI();
+            gameElements.startBtn.textContent = 'Reiniciar';
+            gameElements.pauseBtn.disabled = false;
+            gameElements.gameOver.classList.remove('show');
             
-            gameRunning = true;
-            gamePaused = false;
-            score = 0;
-            lives = 3;
-            carPosition = 100;
-            carLane = 1;
-            brightwayActivated = false;
-            obstacles = [];
-            gameSpeed = 5;
-            obstacleSpawnTimer = 0;
-            isJumping = false;
+            clearObstacles();
             
-            scoreElement.textContent = score;
-            livesElement.textContent = lives;
-            startBtn.textContent = 'Reiniciar';
-            startBtn.disabled = true;
-            pauseBtn.disabled = false;
-            
-            car.style.left = carPosition + 'px';
-            car.classList.remove('crashed');
-            brightwayLight.classList.remove('active');
-            carLights.style.opacity = '0.3';
-            gameOverModal.classList.remove('show');
-            
-            // Clear existing obstacles
-            document.querySelectorAll('.obstacle').forEach(obs => obs.remove());
-            
-            // Position BrightWay
-            const randomPos = Math.random() * 400 + 200;
-            brightwayGame.style.right = randomPos + 'px';
-            
-            // Start game loop
+            gameElements.car.className = 'car';
+            gameElements.lightEffect.classList.remove('active');
+            gameElements.carLights.style.opacity = '0.4';
+            gameElements.gameCanvas.style.background = 'var(--darker)';
+
             gameLoop = setInterval(updateGame, 1000 / 60); // 60 FPS
-            
-            setTimeout(() => {
-                startBtn.disabled = false;
-            }, 1000);
         }
 
         function updateGame() {
-            if (!gameRunning || gamePaused) return;
-            
-            // Update score
-            if (brightwayActivated) {
-                score += 1;
-                scoreElement.textContent = Math.floor(score / 10);
-            }
-            
-            // Spawn obstacles
-            obstacleSpawnTimer++;
-            if (obstacleSpawnTimer > (brightwayActivated ? 80 : 120)) {
+            if (!gameState.running || gameState.paused) return;
+
+            gameState.frameCounter++;
+
+            gameState.score += gameState.brightwayActive ? 3 : 1;
+            gameElements.score.textContent = Math.floor(gameState.score / 60);
+
+            if (gameState.frameCounter % gameState.obstacleSpawnRate === 0) {
                 spawnObstacle();
-                obstacleSpawnTimer = 0;
             }
-            
-            // Update obstacles
+
             updateObstacles();
-            
-            // Check collisions
             checkCollisions();
-            
-            // Increase difficulty
-            if (score > 0 && score % 500 === 0) {
-                gameSpeed = Math.min(gameSpeed + 0.5, 12);
+
+            if (gameState.frameCounter % 1800 === 0) { // Every 30 seconds
+                gameState.gameSpeed = Math.min(gameState.gameSpeed + 0.5, 8);
+                gameState.obstacleSpawnRate = Math.max(gameState.obstacleSpawnRate - 8, 50);
             }
         }
 
@@ -1437,36 +1417,41 @@
             const obstacle = document.createElement('div');
             obstacle.className = 'obstacle';
             
-            const types = ['rock', 'barrier', ''];
-            const type = types[Math.floor(Math.random() * types.length)];
-            if (type) obstacle.classList.add(type);
+            const availableLanes = ['left', 'right'];
+            const recentObstacles = gameState.obstacles.filter(obs => obs.y < 150);
             
-            const lane = Math.floor(Math.random() * 3);
-            const bottomPosition = 80 + (lane * 0); // All obstacles at same height for simplicity
-            obstacle.style.bottom = bottomPosition + 'px';
-            obstacle.style.right = '-60px';
-            obstacle.style.animationDuration = (800 / gameSpeed) + 's';
+            let lane;
+            if (recentObstacles.length > 0) {
+                const existingLane = recentObstacles[0].lane;
+                lane = existingLane === 'left' ? 'right' : 'left';
+            } else {
+                lane = availableLanes[Math.floor(Math.random() * availableLanes.length)];
+            }
             
-            gameCanvas.appendChild(obstacle);
-            obstacles.push({element: obstacle, passed: false});
+            obstacle.classList.add('lane-' + lane);
+            gameElements.gameCanvas.appendChild(obstacle);
+            gameState.obstacles.push({ 
+                element: obstacle, 
+                lane: lane, 
+                passed: false, 
+                y: 0,
+                hit: false
+            });
         }
 
         function updateObstacles() {
-            obstacles = obstacles.filter(obs => {
-                const rect = obs.element.getBoundingClientRect();
-                const canvasRect = gameCanvas.getBoundingClientRect();
+            gameState.obstacles = gameState.obstacles.filter(obs => {
+                obs.y += gameState.gameSpeed;
+                obs.element.style.top = obs.y + 'px';
                 
-                // Remove obstacles that have left the screen
-                if (rect.right < canvasRect.left) {
+                if (obs.y > gameElements.gameCanvas.offsetHeight + 100) {
                     obs.element.remove();
                     return false;
                 }
                 
-                // Add score for passed obstacles
-                if (!obs.passed && rect.right < canvasRect.left + carPosition) {
+                if (!obs.passed && obs.y > gameElements.gameCanvas.offsetHeight - 200) {
                     obs.passed = true;
-                    score += 5;
-                    scoreElement.textContent = Math.floor(score / 10);
+                    gameState.score += 30;
                 }
                 
                 return true;
@@ -1474,162 +1459,116 @@
         }
 
         function checkCollisions() {
-            if (isJumping) return;
+            const carY = gameElements.gameCanvas.offsetHeight - 170;
             
-            const carRect = car.getBoundingClientRect();
-            
-            obstacles.forEach(obs => {
-                const obsRect = obs.element.getBoundingClientRect();
+            gameState.obstacles.forEach(obs => {
+                if (obs.hit) return;
                 
-                if (carRect.left < obsRect.right &&
-                    carRect.right > obsRect.left &&
-                    carRect.top < obsRect.bottom &&
-                    carRect.bottom > obsRect.top) {
+                if (obs.lane === gameState.carLane && 
+                    obs.y >= carY - 40 && obs.y <= carY + 40) {
                     
-                    if (!obs.hit) {
-                        obs.hit = true;
-                        hitObstacle();
-                    }
+                    obs.hit = true;
+                    hitObstacle();
                 }
             });
         }
 
-        function hitObstacle() {
-            lives--;
-            livesElement.textContent = lives;
+        function changeLane(newLane) {
+            if (!gameState.running || gameState.paused) return;
+            if (gameState.carLane === newLane) return;
             
-            car.classList.add('crashed');
+            gameState.carLane = newLane;
+            gameElements.car.classList.remove('lane-left', 'lane-right');
+            gameElements.car.classList.add('lane-' + newLane);
+        }
+
+        function activateBrightWay() {
+            if (!gameState.running || gameState.brightwayActive) return;
+            
+            gameState.brightwayActive = true;
+            gameElements.lightEffect.classList.add('active');
+            gameElements.carLights.style.opacity = '1';
+            gameElements.gameCanvas.style.background = 'linear-gradient(135deg, #2A2A2A 0%, #1A1A1A 100%)';
+            
+            gameState.score += 150;
+            
+            gameState.obstacles.forEach(obs => {
+                obs.element.style.background = 'var(--danger)';
+                obs.element.style.boxShadow = '0 0 15px var(--danger)';
+            });
+            
             setTimeout(() => {
-                car.classList.remove('crashed');
-            }, 500);
+                gameState.brightwayActive = false;
+                gameElements.lightEffect.classList.remove('active');
+                gameElements.carLights.style.opacity = '0.4';
+                gameElements.gameCanvas.style.background = 'var(--darker)';
+                
+                gameState.obstacles.forEach(obs => {
+                    obs.element.style.background = 'var(--gray-600)';
+                    obs.element.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.5)';
+                });
+            }, 5000);
+        }
+
+        function hitObstacle() {
+            gameState.lives--;
+            gameElements.lives.textContent = gameState.lives;
             
-            if (lives <= 0) {
+            gameElements.car.style.background = 'linear-gradient(0deg, var(--danger), #DC2626)';
+            gameElements.car.style.boxShadow = '0 0 25px var(--danger)';
+            
+            setTimeout(() => {
+                gameElements.car.style.background = 'linear-gradient(0deg, var(--blue), #1E40AF)';
+                gameElements.car.style.boxShadow = '0 5px 20px rgba(59, 130, 246, 0.4)';
+            }, 600);
+            
+            if (gameState.lives <= 0) {
                 endGame();
             }
         }
 
-        function jumpCar() {
-            if (isJumping || !gameRunning || gamePaused) return;
+        function togglePause() {
+            if (!gameState.running) return;
             
-            isJumping = true;
-            car.classList.add('jumping');
-            
-            setTimeout(() => {
-                car.classList.remove('jumping');
-                isJumping = false;
-            }, 500);
-        }
-
-        function moveCar(direction) {
-            if (!gameRunning || gamePaused) return;
-            
-            if (direction === 'left' && carPosition > 20) {
-                carPosition = Math.max(carPosition - 30, 20);
-            } else if (direction === 'right' && carPosition < 700) {
-                carPosition = Math.min(carPosition + 30, 700);
-            }
-            
-            car.style.left = carPosition + 'px';
-        }
-
-        function activateBrightway() {
-            if (!gameRunning || brightwayActivated) return;
-            
-            brightwayActivated = true;
-            brightwayLight.classList.add('active');
-            carLights.style.opacity = '1';
-            car.style.boxShadow = '0 5px 30px rgba(255, 193, 7, 0.5)';
-            
-            score += 100;
-            scoreElement.textContent = Math.floor(score / 10);
-        }
-
-        function pauseGame() {
-            if (!gameRunning) return;
-            
-            gamePaused = !gamePaused;
-            pauseBtn.textContent = gamePaused ? 'Reanudar' : 'Pausar';
+            gameState.paused = !gameState.paused;
+            gameElements.pauseBtn.textContent = gameState.paused ? 'Reanudar' : 'Pausar';
         }
 
         function endGame() {
-            gameRunning = false;
+            gameState.running = false;
             clearInterval(gameLoop);
             
-            finalScoreElement.textContent = Math.floor(score / 10);
-            gameOverModal.classList.add('show');
-            
-            if (score / 10 > highScore) {
-                highScore = Math.floor(score / 10);
-                highScoreElement.textContent = highScore;
-                if (typeof localStorage !== 'undefined') {
-                    localStorage.setItem('brightwayHighScore', highScore);
-                }
+            const finalScore = Math.floor(gameState.score / 60);
+            if (finalScore > gameState.highScore) {
+                gameState.highScore = finalScore;
+                gameElements.highScore.textContent = gameState.highScore;
             }
             
-            startBtn.textContent = 'Iniciar Juego';
-            startBtn.disabled = false;
-            pauseBtn.disabled = true;
-            pauseBtn.textContent = 'Pausar';
+            gameElements.finalScore.textContent = finalScore;
+            gameElements.gameOver.classList.add('show');
+            
+            gameElements.startBtn.textContent = 'Iniciar Juego';
+            gameElements.pauseBtn.disabled = true;
+            gameElements.pauseBtn.textContent = 'Pausar';
         }
 
         function resetGame() {
-            gameOverModal.classList.remove('show');
+            if (gameLoop) clearInterval(gameLoop);
+            gameState.running = false;
+            clearObstacles();
+            gameElements.gameOver.classList.remove('show');
             startGame();
         }
 
-        // Keyboard Controls
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft') moveCar('left');
-            else if (e.key === 'ArrowRight') moveCar('right');
-            else if (e.key === 'ArrowUp') jumpCar();
-            else if (e.key === ' ') {
-                e.preventDefault();
-                activateBrightway();
-            }
-        });
+        function clearObstacles() {
+            gameState.obstacles.forEach(obs => obs.element.remove());
+            gameState.obstacles = [];
+        }
 
-        // Button Controls
-        startBtn.addEventListener('click', startGame);
-        pauseBtn.addEventListener('click', pauseGame);
-        
-        // Mobile Controls
-        document.getElementById('leftBtn')?.addEventListener('click', () => moveCar('left'));
-        document.getElementById('rightBtn')?.addEventListener('click', () => moveCar('right'));
-        document.getElementById('jumpBtn')?.addEventListener('click', jumpCar);
-        document.getElementById('lightBtn')?.addEventListener('click', activateBrightway);
-        
-        // Touch controls for mobile
-        let touchStartX = 0;
-        let touchStartY = 0;
-        
-        gameCanvas.addEventListener('touchstart', (e) => {
-            touchStartX = e.touches[0].clientX;
-            touchStartY = e.touches[0].clientY;
-        });
-        
-        gameCanvas.addEventListener('touchmove', (e) => {
-            if (!gameRunning || gamePaused) return;
-            e.preventDefault();
-            
-            const touchX = e.touches[0].clientX;
-            const touchY = e.touches[0].clientY;
-            const diffX = touchX - touchStartX;
-            const diffY = touchStartY - touchY;
-            
-            if (Math.abs(diffX) > 30) {
-                if (diffX > 0) moveCar('right');
-                else moveCar('left');
-                touchStartX = touchX;
-            }
-            
-            if (diffY > 50) {
-                jumpCar();
-                touchStartY = touchY;
-            }
-        });
-        
-        // Click on BrightWay to activate
-        brightwayGame.addEventListener('click', activateBrightway);
+        function updateUI() {
+            gameElements.score.textContent = Math.floor(gameState.score / 60);
+            gameElements.lives.textContent = gameState.lives;
+        }
     </script>
 </body>
 </html>
