@@ -966,7 +966,7 @@
                 font-size: 1.2rem;
             }
 
-            .nav-item:nth-child(1)::before { content: "📝"; }
+            .nav-item:nth-child(1)::before { content: "🏠"; }
             .nav-item:nth-child(2)::before { content: "🔧"; }
             .nav-item:nth-child(3)::before { content: "🎮"; }
 
@@ -1327,7 +1327,7 @@
         let gameRunning = false;
         let gamePaused = false;
         let score = 0;
-        let highScore = localStorage.getItem('brightwayHighScore') || 0;
+        let highScore = parseInt(localStorage?.getItem('brightwayHighScore') || '0');
         let lives = 3;
         let carPosition = 100;
         let carLane = 1; // 0: top, 1: middle, 2: bottom
@@ -1560,7 +1560,9 @@
             if (score / 10 > highScore) {
                 highScore = Math.floor(score / 10);
                 highScoreElement.textContent = highScore;
-                localStorage.setItem('brightwayHighScore', highScore);
+                if (typeof localStorage !== 'undefined') {
+                    localStorage.setItem('brightwayHighScore', highScore);
+                }
             }
             
             startBtn.textContent = 'Iniciar Juego';
