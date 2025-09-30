@@ -1,3 +1,4 @@
+
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -36,48 +37,42 @@
             min-height: 100vh;
             line-height: 1.6;
             overflow-x: hidden;
-            touch-action: pan-y;
         }
 
-        /* Loading Screen */
-        .loading {
+        /* Audio Controls */
+        .audio-controls {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background: var(--darker);
+            top: 20px;
+            right: 20px;
+            z-index: 2000;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.8s ease, visibility 0.8s ease;
+            gap: 0.5rem;
         }
 
-        .loading.hidden {
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 3px solid rgba(255, 107, 53, 0.1);
-            border-top: 3px solid var(--primary);
+        .audio-btn {
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
             border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 1rem;
+            color: var(--white);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .audio-btn:hover {
+            background: rgba(255, 107, 53, 0.3);
+            border-color: var(--primary);
+            transform: scale(1.1);
         }
 
-        .loading-text {
-            color: var(--gray-400);
-            font-size: 0.9rem;
+        .audio-btn.muted {
+            opacity: 0.5;
         }
 
         /* Navigation */
@@ -89,81 +84,42 @@
             backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             z-index: 1000;
+            padding: 1.5rem 0;
         }
 
         .nav-container {
             max-width: 1200px;
             margin: 0 auto;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            padding: 1rem 1.5rem;
+            padding: 0 1.5rem;
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            font-size: 1.5rem;
+            gap: 0.75rem;
+            font-size: 1.75rem;
             font-weight: 700;
             color: var(--primary);
         }
 
         .logo-icon {
-            width: 32px;
-            height: 32px;
+            width: 40px;
+            height: 40px;
             background: linear-gradient(135deg, var(--primary), var(--accent));
-            border-radius: 8px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
-        }
-
-        .nav-menu {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .nav-btn {
-            background: none;
-            border: none;
-            color: var(--gray-400);
-            padding: 0.75rem 1rem;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .nav-btn:hover {
-            color: var(--white);
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .nav-btn.active {
-            color: var(--primary);
-            background: rgba(255, 107, 53, 0.1);
+            font-size: 1.5rem;
         }
 
         /* Main Content */
         main {
-            padding-top: 70px;
-        }
-
-        .section {
-            display: none;
-            min-height: calc(100vh - 70px);
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.5s ease;
-        }
-
-        .section.active {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
+            padding-top: 100px;
+            min-height: 100vh;
         }
 
         .container {
@@ -197,11 +153,11 @@
         }
 
         .hero-description {
-            max-width: 600px;
+            max-width: 700px;
             margin: 0 auto 3rem;
             font-size: clamp(0.95rem, 3vw, 1.1rem);
             color: var(--gray-300);
-            line-height: 1.7;
+            line-height: 1.8;
         }
 
         /* Product Visualization */
@@ -210,14 +166,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 300px;
-        }
-
-        .product-3d {
-            position: relative;
-            width: min(300px, 80vw);
-            height: min(400px, 50vh);
-            perspective: 1000px;
+            min-height: 350px;
         }
 
         .trafitambo {
@@ -225,7 +174,6 @@
             width: 120px;
             height: 250px;
             margin: 0 auto;
-            transform-style: preserve-3d;
             animation: float 6s ease-in-out infinite;
         }
 
@@ -298,6 +246,30 @@
             25%, 75% { opacity: 0.3; }
         }
 
+        /* CTA Button */
+        .cta-section {
+            text-align: center;
+            margin: 3rem 0;
+        }
+
+        .btn-play {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: var(--white);
+            border: none;
+            padding: 1.25rem 3rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+        }
+
+        .btn-play:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 107, 53, 0.5);
+        }
+
         /* Features */
         .features {
             padding: 4rem 0;
@@ -317,6 +289,7 @@
             padding: 2rem;
             transition: all 0.3s ease;
             backdrop-filter: blur(10px);
+            cursor: pointer;
         }
 
         .feature-card:hover {
@@ -341,7 +314,6 @@
             font-size: 1.25rem;
             font-weight: 600;
             margin-bottom: 0.75rem;
-            color: var(--white);
         }
 
         .feature-description {
@@ -350,16 +322,35 @@
             line-height: 1.6;
         }
 
-        /* Game Section */
-        .game {
+        /* Game Modal */
+        .game-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 3000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            overflow-y: auto;
             padding: 2rem 0;
-            text-align: center;
+        }
+
+        .game-modal.active {
+            display: flex;
         }
 
         .game-container {
             max-width: 900px;
-            width: 100%;
+            width: 95%;
+            padding: 2rem;
+            margin: auto;
         }
+
+
 
         .game-stats {
             display: flex;
@@ -387,8 +378,8 @@
         .game-canvas {
             position: relative;
             width: 100%;
-            max-width: min(800px, 95vw);
-            height: clamp(450px, 70vh, 600px);
+            max-width: min(700px, 95vw);
+            height: clamp(400px, 60vh, 500px);
             margin: 2rem auto;
             background: var(--darker);
             border-radius: 20px;
@@ -398,7 +389,6 @@
             touch-action: none;
         }
 
-        /* Touch zones for mobile */
         .touch-zone {
             position: absolute;
             top: 0;
@@ -419,7 +409,6 @@
             width: 50%;
         }
 
-        /* Road - Top Down View */
         .road {
             position: absolute;
             top: 0;
@@ -454,7 +443,6 @@
             100% { transform: translateX(-50%) translateY(60px); }
         }
 
-        /* Car - Top Down View */
         .car {
             position: absolute;
             bottom: clamp(60px, 15%, 80px);
@@ -473,7 +461,6 @@
             left: 65%;
         }
 
-        /* Car Details - Top View */
         .car::before {
             content: '';
             position: absolute;
@@ -509,10 +496,8 @@
             background: radial-gradient(ellipse, rgba(255, 255, 255, 0.8) 0%, transparent 70%);
             border-radius: 50%;
             opacity: 0.4;
-            transition: all 0.3s ease;
         }
 
-        /* Obstacles - Top Down View */
         .obstacle {
             position: absolute;
             top: -60px;
@@ -544,7 +529,6 @@
             border-radius: 8px;
         }
 
-        /* Car obstacles when BrightWay is active - FIXED ORIENTATION */
         .obstacle.car-red {
             background: linear-gradient(180deg, #DC2626, #EF4444);
             border-radius: 6px 6px 12px 12px;
@@ -555,7 +539,6 @@
             background: rgba(239, 68, 68, 0.3);
             border: 2px solid rgba(239, 68, 68, 0.6);
             border-radius: 15px;
-            top: 20%;
         }
 
         .obstacle.car-red::after {
@@ -580,7 +563,6 @@
             background: rgba(16, 185, 129, 0.3);
             border: 2px solid rgba(16, 185, 129, 0.6);
             border-radius: 15px;
-            top: 20%;
         }
 
         .obstacle.car-green::after {
@@ -605,7 +587,6 @@
             background: rgba(245, 158, 11, 0.3);
             border: 2px solid rgba(245, 158, 11, 0.6);
             border-radius: 15px;
-            top: 20%;
         }
 
         .obstacle.car-yellow::after {
@@ -630,7 +611,6 @@
             background: rgba(139, 92, 246, 0.3);
             border: 2px solid rgba(139, 92, 246, 0.6);
             border-radius: 15px;
-            top: 20%;
         }
 
         .obstacle.car-purple::after {
@@ -645,7 +625,6 @@
             border-radius: 0 0 8px 8px;
         }
 
-        /* Speed indicator */
         .speed-indicator {
             position: absolute;
             top: 20px;
@@ -660,7 +639,6 @@
             z-index: 15;
         }
 
-        /* BrightWay Post */
         .brightway-post {
             position: absolute;
             right: clamp(30px, 8%, 60px);
@@ -671,11 +649,9 @@
             cursor: pointer;
             z-index: 25;
             transition: all 0.3s ease;
-            touch-action: manipulation;
         }
 
-        .brightway-post:hover,
-        .brightway-post:active {
+        .brightway-post:hover {
             transform: translateY(-50%) scale(1.1);
         }
 
@@ -727,7 +703,6 @@
             50% { transform: translate(-50%, -50%) scale(1.2); }
         }
 
-        /* Game Controls */
         .game-controls {
             margin: 2rem 0;
             display: flex;
@@ -761,11 +736,26 @@
         }
 
         .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            background: linear-gradient(135deg, #3B82F6, #1E40AF);
+            border: none;
         }
 
-        /* Game Over Modal */
+        .btn-secondary:hover {
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-exit {
+            background: linear-gradient(135deg, var(--danger), #DC2626);
+        }
+
+        .btn-menu {
+            background: linear-gradient(135deg, var(--accent), #D97706);
+        }
+
+        .btn-menu:hover {
+            box-shadow: 0 10px 30px rgba(255, 193, 7, 0.4);
+        }
+
         .game-over {
             position: absolute;
             top: 50%;
@@ -805,10 +795,10 @@
             margin-bottom: 2rem;
         }
 
-        /* Car Color Selector */
         .car-selector {
             margin: 2rem 0;
             text-align: center;
+            transition: all 0.3s ease;
         }
 
         .car-selector h4 {
@@ -876,7 +866,6 @@
             border: 1px solid rgba(255, 255, 255, 0.5);
         }
 
-        /* Instructions */
         .instructions {
             background: rgba(255, 255, 255, 0.05);
             border: 2px solid rgba(255, 255, 255, 0.1);
@@ -902,7 +891,6 @@
             line-height: 1.6;
         }
 
-        /* Footer */
         footer {
             padding: 3rem 0 2rem;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
@@ -948,67 +936,18 @@
             border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* Responsive Design */
         @media (max-width: 768px) {
-            .nav-container {
-                padding: 0.75rem 1rem;
-            }
-
-            .logo {
-                font-size: 1.25rem;
-            }
-
-            .nav-menu {
-                gap: 0.25rem;
-            }
-
-            .nav-btn {
-                padding: 0.5rem 0.75rem;
-                font-size: 0.8rem;
-            }
-
-            .hero {
-                padding: 2rem 0;
-            }
-
-            .features-grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-
-            .game-stats {
-                gap: 1.5rem;
-            }
-
-            .game {
-                padding: 1rem 0;
-            }
-
-            .instructions {
-                padding: 1.5rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 0 1rem;
-            }
-
-            .product-showcase {
-                min-height: 250px;
-            }
-
-            .game-over {
-                padding: 2rem;
+            .audio-controls {
+                top: 80px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Loading Screen -->
-    <div class="loading" id="loading">
-        <div class="loading-spinner"></div>
-        <div class="loading-text">Cargando BrightWay...</div>
+    <!-- Audio Controls -->
+    <div class="audio-controls">
+        <button class="audio-btn" id="musicBtn" title="Música">🎵</button>
+        <button class="audio-btn" id="soundBtn" title="Efectos">🔊</button>
     </div>
 
     <!-- Navigation -->
@@ -1018,145 +957,68 @@
                 <div class="logo-icon">💡</div>
                 BrightWay
             </div>
-            <div class="nav-menu">
-                <button class="nav-btn active" data-section="description">Descripción</button>
-                <button class="nav-btn" data-section="game">Minijuego</button>
-            </div>
         </div>
     </nav>
 
     <!-- Main Content -->
     <main>
-        <!-- Description Section -->
-        <section id="description" class="section active">
+        <div class="container">
+            <div class="hero">
+                <h1 class="hero-title">BrightWay</h1>
+                <p class="hero-subtitle">Dale luz a tu camino</p>
+                <p class="hero-description">
+                    BrightWay vela por tu seguridad al implementar tecnologías modernas y buenas para el ambiente. 
+                    Un innovador sistema de señalización vial que combina un trafitambo tradicional con tecnología 
+                    solar avanzada, proporcionando iluminación autónoma y sostenible para mejorar la seguridad vial.
+                </p>
+            </div>
+
+            <div class="product-showcase">
+                <div class="trafitambo">
+                    <div class="solar-panel"></div>
+                    <div class="trafitambo-body">
+                        <div class="reflective-stripe"></div>
+                        <div class="led-strip">
+                            <div class="led"></div>
+                            <div class="led"></div>
+                            <div class="led"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cta-section">
+                <button class="btn-play" id="playGameBtn">🎮 Jugar Minijuego</button>
+                <button class="btn-play" id="instructionsBtn" style="background: rgba(255, 255, 255, 0.1); margin-top: 1rem;">📖 Instrucciones del Juego</button>
+            </div>
+        </div>
+
+        <div class="features">
             <div class="container">
-                <div class="hero">
-                    <h1 class="hero-title">BrightWay</h1>
-                    <p class="hero-subtitle">Dale luz a tu camino</p>
-                    <p class="hero-description">
-                        BrightWay vela por tu seguridad al implementar tecnologías modernas y buenas para el ambiente. 
-                        Un innovador sistema de señalización vial que combina un trafitambo tradicional con tecnología 
-                        solar avanzada, proporcionando iluminación autónoma y sostenible para mejorar la seguridad vial.
-                    </p>
-                </div>
-
-                <div class="product-showcase">
-                    <div class="product-3d">
-                        <div class="trafitambo">
-                            <div class="solar-panel"></div>
-                            <div class="trafitambo-body">
-                                <div class="reflective-stripe"></div>
-                                <div class="led-strip">
-                                    <div class="led"></div>
-                                    <div class="led"></div>
-                                    <div class="led"></div>
-                                </div>
-                            </div>
-                        </div>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">☀️</div>
+                        <h3 class="feature-title">Energía Solar</h3>
+                        <p class="feature-description">Panel solar móvil con servomotores para optimizar la captación de energía durante todo el día.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">💡</div>
+                        <h3 class="feature-title">Iluminación LED</h3>
+                        <p class="feature-description">Sistema de LEDs de alta eficiencia con sensor de movimiento para máxima visibilidad nocturna.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🌱</div>
+                        <h3 class="feature-title">Eco-Amigable</h3>
+                        <p class="feature-description">Tecnología 100% sustentable que no requiere conexión eléctrica externa.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔧</div>
+                        <h3 class="feature-title">Arduino Nano</h3>
+                        <p class="feature-description">Control inteligente mediante microcontrolador para gestión automática del sistema.</p>
                     </div>
                 </div>
             </div>
-
-            <div class="features">
-                <div class="container">
-                    <div class="features-grid">
-                        <div class="feature-card">
-                            <div class="feature-icon">☀️</div>
-                            <h3 class="feature-title">Energía Solar</h3>
-                            <p class="feature-description">Panel solar móvil con servomotores para optimizar la captación de energía durante todo el día.</p>
-                        </div>
-                        <div class="feature-card">
-                            <div class="feature-icon">💡</div>
-                            <h3 class="feature-title">Iluminación LED</h3>
-                            <p class="feature-description">Sistema de LEDs de alta eficiencia con sensor de movimiento para máxima visibilidad nocturna.</p>
-                        </div>
-                        <div class="feature-card">
-                            <div class="feature-icon">🌱</div>
-                            <h3 class="feature-title">Eco-Amigable</h3>
-                            <p class="feature-description">Tecnología 100% sustentable que no requiere conexión eléctrica externa.</p>
-                        </div>
-                        <div class="feature-card">
-                            <div class="feature-icon">🔧</div>
-                            <h3 class="feature-title">Arduino Nano</h3>
-                            <p class="feature-description">Control inteligente mediante microcontrolador para gestión automática del sistema.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Game Section -->
-        <section id="game" class="section">
-            <div class="container">
-                <div class="game">
-                    <div class="game-container">
-                        <h1 class="hero-title">BrightWay</h1>
-                        <p class="hero-subtitle">Conduce en la oscuridad y activa el BrightWay</p>
-
-                        <div class="game-stats">
-                            <div class="stat">
-                                <div class="stat-label">Puntos</div>
-                                <div class="stat-value" id="score">0</div>
-                            </div>
-                            <div class="stat">
-                                <div class="stat-label">Récord</div>
-                                <div class="stat-value" id="highScore">0</div>
-                            </div>
-                            <div class="stat">
-                                <div class="stat-label">Vidas</div>
-                                <div class="stat-value" id="lives">3</div>
-                            </div>
-                        </div>
-                        
-                        <div class="game-canvas" id="gameCanvas">
-                            <!-- Touch zones for mobile -->
-                            <div class="touch-zone touch-zone-left" id="touchLeft"></div>
-                            <div class="touch-zone touch-zone-right" id="touchRight"></div>
-                            
-                            <div class="road">
-                                <div class="road-markings"></div>
-                            </div>
-                            <div class="car" id="car">
-                                <div class="car-lights" id="carLights"></div>
-                            </div>
-                            <div class="brightway-post" id="brightwayPost">
-                                <div class="brightway-body"></div>
-                                <div class="brightway-panel"></div>
-                                <div class="light-effect" id="lightEffect"></div>
-                            </div>
-                            <div class="speed-indicator" id="speedIndicator">Velocidad: 1x</div>
-                            <div class="game-over" id="gameOver">
-                                <h3>¡Juego Terminado!</h3>
-                                <div class="final-score">Puntuación: <span id="finalScore">0</span></div>
-                                <button class="btn" onclick="resetGame()">Jugar de Nuevo</button>
-                            </div>
-                        </div>
-                        
-                        <div class="car-selector">
-                            <h4>Selecciona el color de tu auto:</h4>
-                            <div class="car-options">
-                                <div class="car-option blue active" data-color="blue"></div>
-                                <div class="car-option red" data-color="red"></div>
-                                <div class="car-option yellow" data-color="yellow"></div>
-                            </div>
-                        </div>
-                        
-                        <div class="game-controls">
-                            <button class="btn" id="startBtn">Iniciar Juego</button>
-                            <button class="btn btn-secondary" id="pauseBtn" disabled>Pausar</button>
-                        </div>
-
-                        <div class="instructions">
-                            <h4>Cómo Jugar:</h4>
-                            <p><strong>Objetivo:</strong> Conduce tu auto esquivando obstáculos que caen desde arriba y activa el BrightWay para iluminar el camino.</p>
-                            <p><strong>Controles PC:</strong> Flechas ← → para cambiar de carril, Espacio para activar BrightWay</p>
-                            <p><strong>Controles Móvil:</strong> Toca la mitad izquierda o derecha de la pantalla para cambiar de carril, toca el poste BrightWay (derecha) para activarlo</p>
-                            <p><strong>Puntuación:</strong> Ganas puntos por tiempo y por activar el BrightWay. ¡La velocidad aumenta progresivamente!</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        </div>
     </main>
 
     <!-- Footer -->
@@ -1176,13 +1038,300 @@
         </div>
     </footer>
 
+    <!-- Game Modal -->
+    <div class="game-modal" id="gameModal">
+        <div class="game-container">
+            <div class="game-stats">
+                <div class="stat">
+                    <div class="stat-label">Puntos</div>
+                    <div class="stat-value" id="score">0</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Récord</div>
+                    <div class="stat-value" id="highScore">0</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Vidas</div>
+                    <div class="stat-value" id="lives">3</div>
+                </div>
+            </div>
+            
+            <div class="game-canvas" id="gameCanvas">
+                <div class="touch-zone touch-zone-left" id="touchLeft"></div>
+                <div class="touch-zone touch-zone-right" id="touchRight"></div>
+                
+                <div class="road">
+                    <div class="road-markings"></div>
+                </div>
+                <div class="car" id="car">
+                    <div class="car-lights" id="carLights"></div>
+                </div>
+                <div class="brightway-post" id="brightwayPost">
+                    <div class="brightway-body"></div>
+                    <div class="brightway-panel"></div>
+                    <div class="light-effect" id="lightEffect"></div>
+                </div>
+                <div class="speed-indicator" id="speedIndicator">Velocidad: 1x</div>
+                <div class="game-over" id="gameOver">
+                    <h3>¡Juego Terminado!</h3>
+                    <div class="final-score">Puntuación: <span id="finalScore">0</span></div>
+                    <button class="btn" onclick="resetGame()">Jugar de Nuevo</button>
+                </div>
+            </div>
+            
+            <div class="car-selector">
+                <h4>Selecciona el color de tu auto:</h4>
+                <div class="car-options">
+                    <div class="car-option blue active" data-color="blue"></div>
+                    <div class="car-option red" data-color="red"></div>
+                    <div class="car-option yellow" data-color="yellow"></div>
+                </div>
+            </div>
+            
+            <div class="game-controls">
+                <button class="btn btn-secondary" id="pauseBtn" disabled>Pausar</button>
+                <button class="btn btn-exit" id="exitBtn" disabled>Reiniciar Juego</button>
+                <button class="btn btn-menu" id="menuBtn">Volver al Menú Principal</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Instructions Modal -->
+    <div class="game-modal" id="instructionsModal">
+        <div class="game-container">
+            <h2 class="hero-title" style="font-size: 2.5rem; text-align: center; margin-bottom: 2rem;">Cómo Jugar</h2>
+            
+            <div class="instructions" style="max-width: 700px;">
+                <h4>Objetivo:</h4>
+                <p>Conduce tu auto esquivando obstáculos que caen desde arriba y activa el BrightWay para iluminar el camino y ver los autos de colores.</p>
+                
+                <h4 style="margin-top: 1.5rem;">Controles PC:</h4>
+                <p>• Usa las flechas <strong>← →</strong> para cambiar de carril izquierdo o derecho</p>
+                <p>• Presiona <strong>ESPACIO</strong> para activar el poste BrightWay y ver los obstáculos iluminados</p>
+                <p>• El juego inicia automáticamente al presionar una flecha</p>
+                
+                <h4 style="margin-top: 1.5rem;">Controles Móvil:</h4>
+                <p>• Toca la <strong>mitad izquierda</strong> de la pantalla para ir al carril izquierdo</p>
+                <p>• Toca la <strong>mitad derecha</strong> de la pantalla para ir al carril derecho</p>
+                <p>• Toca el <strong>poste BrightWay</strong> (lado derecho) para activarlo</p>
+                <p>• El juego inicia automáticamente al tocar para cambiar de carril</p>
+                
+                <h4 style="margin-top: 1.5rem;">Puntuación:</h4>
+                <p>• Ganas <strong>puntos por tiempo</strong> mientras juegas</p>
+                <p>• Obtén <strong>puntos extra</strong> por esquivar obstáculos exitosamente</p>
+                <p>• Activa el BrightWay para <strong>bonus de puntos</strong> masivos</p>
+                <p>• La velocidad aumenta progresivamente cada 10 segundos</p>
+                
+                <h4 style="margin-top: 1.5rem;">Características Especiales:</h4>
+                <p>• Cuando activas el BrightWay, todos los obstáculos se convierten en <strong>autos de colores</strong> por 4 segundos</p>
+                <p>• Puedes elegir el <strong>color de tu auto</strong> en cualquier momento</p>
+                <p>• Tienes <strong>3 vidas</strong> - ¡Úsalas sabiamente!</p>
+                <p>• Tu récord se guarda automáticamente</p>
+            </div>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <button class="btn-play" onclick="document.getElementById('instructionsModal').classList.remove('active')">Entendido</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Enhanced Game Variables with Progressive Speed
+        // Audio System
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        let musicEnabled = false;
+        let soundEnabled = true;
+        let backgroundMusic = null;
+
+        function playClickSound() {
+            if (!soundEnabled) return;
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = 800;
+            oscillator.type = 'sine';
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.1);
+        }
+
+        function playHitSound() {
+            if (!soundEnabled) return;
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = 200;
+            oscillator.type = 'sawtooth';
+            
+            gainNode.gain.setValueAtTime(0.4, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.3);
+        }
+
+        function playScoreSound() {
+            if (!soundEnabled) return;
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = 1200;
+            oscillator.type = 'sine';
+            
+            gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.15);
+        }
+
+        function playBrightWaySound() {
+            if (!soundEnabled) return;
+            [440, 550, 660].forEach((freq, i) => {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.value = freq;
+                oscillator.type = 'sine';
+                
+                const startTime = audioContext.currentTime + (i * 0.1);
+                gainNode.gain.setValueAtTime(0.2, startTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + 0.3);
+                
+                oscillator.start(startTime);
+                oscillator.stop(startTime + 0.3);
+            });
+        }
+
+        function playSpeedUpSound() {
+            if (!soundEnabled) return;
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.type = 'sawtooth';
+            
+            oscillator.frequency.setValueAtTime(150, audioContext.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 0.5);
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.5);
+        }
+
+        function startBackgroundMusic() {
+            if (!musicEnabled || backgroundMusic) return;
+            
+            backgroundMusic = {
+                oscillators: [],
+                gainNode: audioContext.createGain()
+            };
+            
+            backgroundMusic.gainNode.connect(audioContext.destination);
+            backgroundMusic.gainNode.gain.value = 0.05;
+            
+            const melody = [261.63, 293.66, 329.63, 349.23, 392.00];
+            
+            function playNote(frequency, duration) {
+                const osc = audioContext.createOscillator();
+                const noteGain = audioContext.createGain();
+                
+                osc.connect(noteGain);
+                noteGain.connect(backgroundMusic.gainNode);
+                
+                osc.frequency.value = frequency;
+                osc.type = 'sine';
+                
+                const now = audioContext.currentTime;
+                noteGain.gain.setValueAtTime(0, now);
+                noteGain.gain.linearRampToValueAtTime(1, now + 0.1);
+                noteGain.gain.linearRampToValueAtTime(0, now + duration - 0.1);
+                
+                osc.start(now);
+                osc.stop(now + duration);
+                
+                return osc;
+            }
+            
+            function playMelody() {
+                if (!musicEnabled) return;
+                
+                let time = 0;
+                melody.forEach((freq, i) => {
+                    setTimeout(() => {
+                        if (musicEnabled && backgroundMusic) {
+                            playNote(freq, 0.5);
+                        }
+                    }, time);
+                    time += 600;
+                });
+                
+                setTimeout(() => {
+                    if (musicEnabled && backgroundMusic) {
+                        playMelody();
+                    }
+                }, time + 1000);
+            }
+            
+            playMelody();
+        }
+
+        function stopBackgroundMusic() {
+            if (backgroundMusic) {
+                backgroundMusic.gainNode.disconnect();
+                backgroundMusic = null;
+            }
+        }
+
+        document.getElementById('musicBtn').addEventListener('click', function() {
+            playClickSound();
+            musicEnabled = !musicEnabled;
+            this.classList.toggle('muted');
+            this.textContent = musicEnabled ? '🎵' : '🔇';
+            
+            if (musicEnabled) {
+                startBackgroundMusic();
+            } else {
+                stopBackgroundMusic();
+            }
+        });
+
+        document.getElementById('soundBtn').addEventListener('click', function() {
+            soundEnabled = !soundEnabled;
+            this.classList.toggle('muted');
+            this.textContent = soundEnabled ? '🔊' : '🔇';
+            if (soundEnabled) playClickSound();
+        });
+
+        document.addEventListener('click', function initMusic() {
+            startBackgroundMusic();
+            document.removeEventListener('click', initMusic);
+        }, { once: true });
+
+        // Game Variables
         let gameState = {
             running: false,
             paused: false,
             score: 0,
-            lives: 3,
+            lives: 1,
             highScore: 0,
             carLane: 'left',
             carColor: 'blue',
@@ -1203,53 +1352,29 @@
         let gameLoop = null;
         const carColors = ['red', 'green', 'yellow', 'purple'];
 
-        // Device Detection
         function isMobileDevice() {
             return window.innerWidth <= 768 || 'ontouchstart' in window;
         }
 
-        // App Initialization
         document.addEventListener('DOMContentLoaded', function() {
-            // Hide loading screen
-            setTimeout(() => {
-                document.getElementById('loading').classList.add('hidden');
-            }, 1500);
-
-            // Detect mobile
             gameState.isMobile = isMobileDevice();
-            
-            // Initialize navigation
-            initNavigation();
-            
-            // Initialize game
             initGame();
+            
+            document.getElementById('playGameBtn').addEventListener('click', function() {
+                playClickSound();
+                document.getElementById('gameModal').classList.add('active');
+            });
+            
+            document.getElementById('instructionsBtn').addEventListener('click', function() {
+                playClickSound();
+                document.getElementById('instructionsModal').classList.add('active');
+            });
+
+            document.querySelectorAll('.feature-card').forEach(card => {
+                card.addEventListener('click', playClickSound);
+            });
         });
 
-        // Navigation System
-        function initNavigation() {
-            const navBtns = document.querySelectorAll('.nav-btn');
-            const sections = document.querySelectorAll('.section');
-
-            navBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const targetSection = btn.dataset.section;
-                    
-                    // Update nav active state
-                    navBtns.forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    
-                    // Update section visibility
-                    sections.forEach(section => {
-                        section.classList.remove('active');
-                        if (section.id === targetSection) {
-                            setTimeout(() => section.classList.add('active'), 50);
-                        }
-                    });
-                });
-            });
-        }
-
-        // Enhanced Game Initialization with Touch Controls
         function initGame() {
             gameElements = {
                 car: document.getElementById('car'),
@@ -1262,11 +1387,13 @@
                 lives: document.getElementById('lives'),
                 highScore: document.getElementById('highScore'),
                 finalScore: document.getElementById('finalScore'),
-                startBtn: document.getElementById('startBtn'),
                 pauseBtn: document.getElementById('pauseBtn'),
+                exitBtn: document.getElementById('exitBtn'),
+                menuBtn: document.getElementById('menuBtn'),
                 speedIndicator: document.getElementById('speedIndicator'),
                 touchLeft: document.getElementById('touchLeft'),
-                touchRight: document.getElementById('touchRight')
+                touchRight: document.getElementById('touchRight'),
+                carSelector: document.querySelector('.car-selector')
             };
 
             gameState.highScore = parseInt(localStorage.getItem('brightwayHighScore') || '0');
@@ -1278,36 +1405,17 @@
             updateCarColor();
         }
 
-        // Car Color Selector Setup
         function setupCarColorSelector() {
             const carOptions = document.querySelectorAll('.car-option');
             
             carOptions.forEach(option => {
                 option.addEventListener('click', (e) => {
                     e.preventDefault();
+                    playClickSound();
                     
-                    // Remove active class from all options
                     carOptions.forEach(opt => opt.classList.remove('active'));
-                    
-                    // Add active class to clicked option
                     option.classList.add('active');
                     
-                    // Update car color
-                    gameState.carColor = option.dataset.color;
-                    updateCarColor();
-                });
-                
-                // Also add touch support for mobile
-                option.addEventListener('touchstart', (e) => {
-                    e.preventDefault();
-                    
-                    // Remove active class from all options
-                    carOptions.forEach(opt => opt.classList.remove('active'));
-                    
-                    // Add active class to touched option
-                    option.classList.add('active');
-                    
-                    // Update car color
                     gameState.carColor = option.dataset.color;
                     updateCarColor();
                 });
@@ -1334,83 +1442,107 @@
         }
 
         function setupEventListeners() {
-            // Keyboard controls
             document.addEventListener('keydown', handleKeyDown);
             
-            // Button controls
-            gameElements.startBtn.addEventListener('click', startGame);
-            gameElements.pauseBtn.addEventListener('click', togglePause);
+            gameElements.pauseBtn.addEventListener('click', () => {
+                playClickSound();
+                togglePause();
+            });
             
-            // Touch controls for mobile
+            gameElements.exitBtn.addEventListener('click', () => {
+                playClickSound();
+                resetGame();
+            });
+            
+            gameElements.menuBtn.addEventListener('click', () => {
+                playClickSound();
+                returnToMenu();
+            });
+            
             setupTouchControls();
             
-            // Click on BrightWay post
-            gameElements.brightwayPost.addEventListener('click', activateBrightWay);
+            gameElements.brightwayPost.addEventListener('click', () => {
+                playBrightWaySound();
+                activateBrightWay();
+            });
         }
 
         function setupTouchControls() {
-            // Left touch zone
             gameElements.touchLeft.addEventListener('touchstart', (e) => {
                 e.preventDefault();
+                if (!gameState.running) {
+                    startGame();
+                }
                 if (gameState.running && !gameState.paused) {
+                    playClickSound();
                     changeLane('left');
                 }
             });
 
-            // Right touch zone
             gameElements.touchRight.addEventListener('touchstart', (e) => {
                 e.preventDefault();
+                if (!gameState.running) {
+                    startGame();
+                }
                 if (gameState.running && !gameState.paused) {
+                    playClickSound();
                     changeLane('right');
                 }
             });
 
-            // BrightWay post touch control
             gameElements.brightwayPost.addEventListener('touchstart', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 if (gameState.running && !gameState.paused) {
+                    playBrightWaySound();
                     activateBrightWay();
                 }
             });
 
-            // Prevent scrolling on game canvas
             gameElements.gameCanvas.addEventListener('touchmove', (e) => {
                 e.preventDefault();
             });
         }
 
         function handleKeyDown(e) {
+            if (!gameState.running) {
+                if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    startGame();
+                    return;
+                }
+            }
+            
             if (!gameState.running || gameState.paused) return;
             
             switch(e.key) {
                 case 'ArrowLeft':
                     e.preventDefault();
+                    playClickSound();
                     changeLane('left');
                     break;
                 case 'ArrowRight':
                     e.preventDefault();
+                    playClickSound();
                     changeLane('right');
                     break;
                 case ' ':
                     e.preventDefault();
+                    playBrightWaySound();
                     activateBrightWay();
                     break;
             }
         }
 
         function startGame() {
-            if (gameState.running) {
-                resetGame();
-                return;
-            }
+            if (gameState.running) return;
 
             gameState = {
                 ...gameState,
                 running: true,
                 paused: false,
                 score: 0,
-                lives: 3,
+                lives: 1,
                 carLane: 'left',
                 brightwayActive: false,
                 obstacles: [],
@@ -1421,8 +1553,8 @@
             };
 
             updateUI();
-            gameElements.startBtn.textContent = 'Reiniciar';
             gameElements.pauseBtn.disabled = false;
+            gameElements.exitBtn.disabled = false;
             gameElements.gameOver.classList.remove('show');
             
             clearObstacles();
@@ -1442,16 +1574,13 @@
 
             gameState.frameCounter++;
 
-            // Score increase
             gameState.score += gameState.brightwayActive ? 3 : 1;
             gameElements.score.textContent = Math.floor(gameState.score / 60);
 
-            // Progressive speed increase every 10 seconds (600 frames at 60fps)
             if (gameState.frameCounter % 600 === 0) {
                 increaseGameSpeed();
             }
 
-            // Spawn obstacles
             if (gameState.frameCounter % gameState.obstacleSpawnRate === 0) {
                 spawnObstacle();
             }
@@ -1461,23 +1590,19 @@
         }
 
         function increaseGameSpeed() {
-            // Increase speed multiplier
             gameState.speedMultiplier = Math.min(gameState.speedMultiplier + 0.3, 6);
             
-            // Update game speed
             gameState.gameSpeed = gameState.baseGameSpeed * gameState.speedMultiplier;
             gameState.gameSpeed = Math.min(gameState.gameSpeed, gameState.maxGameSpeed);
             
-            // Decrease obstacle spawn rate (faster spawning)
             gameState.obstacleSpawnRate = Math.max(
                 gameState.baseObstacleSpawnRate - (gameState.speedMultiplier * 15),
                 gameState.minObstacleSpawnRate
             );
             
             updateSpeedIndicator();
-            
-            // Visual feedback for speed increase
             flashSpeedIndicator();
+            playSpeedUpSound();
         }
 
         function updateSpeedIndicator() {
@@ -1511,6 +1636,12 @@
             }
             
             obstacle.classList.add('lane-' + lane);
+            
+            if (gameState.brightwayActive) {
+                const randomColor = carColors[Math.floor(Math.random() * carColors.length)];
+                obstacle.classList.add('car-' + randomColor);
+            }
+            
             gameElements.gameCanvas.appendChild(obstacle);
             gameState.obstacles.push({ 
                 element: obstacle, 
@@ -1526,17 +1657,15 @@
                 obs.y += gameState.gameSpeed;
                 obs.element.style.top = obs.y + 'px';
                 
-                // Remove obstacles that are off screen
                 if (obs.y > gameElements.gameCanvas.offsetHeight + 100) {
                     obs.element.remove();
                     return false;
                 }
                 
-                // Award points for passing obstacles
                 if (!obs.passed && obs.y > gameElements.gameCanvas.offsetHeight - 200) {
                     obs.passed = true;
-                    // Bonus points for higher speeds
                     gameState.score += 30 * gameState.speedMultiplier;
+                    playScoreSound();
                 }
                 
                 return true;
@@ -1577,10 +1706,8 @@
             gameElements.carLights.style.opacity = '1';
             gameElements.gameCanvas.style.background = 'linear-gradient(135deg, #2A2A2A 0%, #1A1A1A 100%)';
             
-            // Bonus points based on speed multiplier
             gameState.score += 150 * gameState.speedMultiplier;
             
-            // Transform existing gray obstacles into colorful cars
             gameState.obstacles.forEach(obs => {
                 const randomColor = carColors[Math.floor(Math.random() * carColors.length)];
                 obs.element.classList.add('car-' + randomColor);
@@ -1592,9 +1719,7 @@
                 gameElements.carLights.style.opacity = '0.4';
                 gameElements.gameCanvas.style.background = 'var(--darker)';
                 
-                // Transform cars back to gray obstacles
                 gameState.obstacles.forEach(obs => {
-                    // Remove all car color classes
                     carColors.forEach(color => {
                         obs.element.classList.remove('car-' + color);
                     });
@@ -1605,8 +1730,8 @@
         function hitObstacle() {
             gameState.lives--;
             gameElements.lives.textContent = gameState.lives;
+            playHitSound();
             
-            // Apply damage effect with current car color
             const colorMap = {
                 blue: 'linear-gradient(0deg, var(--blue), #1E40AF)',
                 red: 'linear-gradient(0deg, #EF4444, #DC2626)',
@@ -1619,7 +1744,6 @@
                 yellow: '0 5px 20px rgba(245, 158, 11, 0.4)'
             };
             
-            // Flash damage effect
             gameElements.car.style.background = 'linear-gradient(0deg, var(--danger), #DC2626)';
             gameElements.car.style.boxShadow = '0 0 25px var(--danger)';
             
@@ -1654,9 +1778,51 @@
             gameElements.finalScore.textContent = finalScore;
             gameElements.gameOver.classList.add('show');
             
-            gameElements.startBtn.textContent = 'Iniciar Juego';
             gameElements.pauseBtn.disabled = true;
+            gameElements.exitBtn.disabled = true;
             gameElements.pauseBtn.textContent = 'Pausar';
+        }
+
+        function returnToMenu() {
+            if (gameLoop) clearInterval(gameLoop);
+            gameState.running = false;
+            gameState.paused = false;
+            
+            clearObstacles();
+            gameElements.gameOver.classList.remove('show');
+            
+            gameElements.pauseBtn.disabled = true;
+            gameElements.exitBtn.disabled = true;
+            gameElements.pauseBtn.textContent = 'Pausar';
+            
+            gameState.score = 0;
+            gameState.lives = 1;
+            gameState.speedMultiplier = 1;
+            updateUI();
+            updateSpeedIndicator();
+            
+            document.getElementById('gameModal').classList.remove('active');
+        }
+
+        function exitGame() {
+            if (!gameState.running) return;
+            
+            if (gameLoop) clearInterval(gameLoop);
+            gameState.running = false;
+            gameState.paused = false;
+            
+            clearObstacles();
+            gameElements.gameOver.classList.remove('show');
+            
+            gameElements.pauseBtn.disabled = true;
+            gameElements.exitBtn.disabled = true;
+            gameElements.pauseBtn.textContent = 'Pausar';
+            
+            gameState.score = 0;
+            gameState.lives = 1;
+            gameState.speedMultiplier = 1;
+            updateUI();
+            updateSpeedIndicator();
         }
 
         function resetGame() {
@@ -1666,6 +1832,27 @@
             clearObstacles();
             gameElements.gameOver.classList.remove('show');
             startGame();
+        }
+
+        function returnToMenu() {
+            if (gameLoop) clearInterval(gameLoop);
+            gameState.running = false;
+            gameState.paused = false;
+            
+            clearObstacles();
+            gameElements.gameOver.classList.remove('show');
+            
+            gameElements.pauseBtn.disabled = true;
+            gameElements.exitBtn.disabled = true;
+            gameElements.pauseBtn.textContent = 'Pausar';
+            
+            gameState.score = 0;
+            gameState.lives = 1;
+            gameState.speedMultiplier = 1;
+            updateUI();
+            updateSpeedIndicator();
+            
+            document.getElementById('gameModal').classList.remove('active');
         }
 
         function clearObstacles() {
@@ -1678,7 +1865,6 @@
             gameElements.lives.textContent = gameState.lives;
         }
 
-        // Handle window resize
         window.addEventListener('resize', () => {
             gameState.isMobile = isMobileDevice();
         });
