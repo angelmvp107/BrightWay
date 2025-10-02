@@ -17,9 +17,6 @@
             --accent: #FFC107;
             --dark: #0A0A0A;
             --darker: #000000;
-            --gray-900: #111111;
-            --gray-800: #1A1A1A;
-            --gray-700: #2A2A2A;
             --gray-600: #404040;
             --gray-400: #888888;
             --gray-300: #CCCCCC;
@@ -38,14 +35,11 @@
             overflow-x: hidden;
         }
 
-        /* Audio Controls */
         .audio-controls {
             position: fixed;
             top: 20px;
             right: 20px;
             z-index: 2000;
-            display: flex;
-            gap: 0.5rem;
         }
 
         .audio-btn {
@@ -70,11 +64,151 @@
             transform: scale(1.1);
         }
 
-        .audio-btn.muted {
-            opacity: 0.5;
+        .audio-btn.active {
+            background: rgba(255, 107, 53, 0.3);
+            border-color: var(--primary);
         }
 
-        /* Navigation */
+        .volume-panel {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 1999;
+            background: rgba(10, 10, 10, 0.95);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            display: none;
+            min-width: 280px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .volume-panel.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .volume-panel h4 {
+            color: var(--primary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .volume-control {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .volume-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .mute-btn {
+            width: 36px;
+            height: 36px;
+            min-width: 36px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--white);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mute-btn:hover {
+            background: rgba(255, 107, 53, 0.2);
+            border-color: var(--primary);
+        }
+
+        .mute-btn.muted {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+        .volume-slider-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .volume-label {
+            font-size: 0.8rem;
+            color: var(--gray-400);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .volume-value {
+            font-size: 0.8rem;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .volume-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .volume-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 15px rgba(255, 107, 53, 0.6);
+        }
+
+        .volume-slider::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .volume-slider::-moz-range-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 15px rgba(255, 107, 53, 0.6);
+        }
+
         nav {
             position: fixed;
             top: 0;
@@ -115,7 +249,6 @@
             font-size: 1.5rem;
         }
 
-        /* Main Content */
         main {
             padding-top: 100px;
             min-height: 100vh;
@@ -127,7 +260,6 @@
             padding: 0 1.5rem;
         }
 
-        /* Hero Section */
         .hero {
             padding: 4rem 0;
             text-align: center;
@@ -159,7 +291,6 @@
             line-height: 1.8;
         }
 
-        /* Product Visualization */
         .product-showcase {
             margin: 3rem 0;
             display: flex;
@@ -245,7 +376,6 @@
             25%, 75% { opacity: 0.3; }
         }
 
-        /* CTA Button */
         .cta-section {
             text-align: center;
             margin: 3rem 0;
@@ -269,7 +399,6 @@
             box-shadow: 0 15px 40px rgba(255, 107, 53, 0.5);
         }
 
-        /* Features */
         .features {
             padding: 4rem 0;
             background: rgba(255, 255, 255, 0.02);
@@ -321,7 +450,6 @@
             line-height: 1.6;
         }
 
-        /* Game Modal */
         .game-modal {
             position: fixed;
             top: 0;
@@ -331,31 +459,36 @@
             background: rgba(0, 0, 0, 0.95);
             z-index: 3000;
             display: none;
-            align-items: center;
-            justify-content: center;
             backdrop-filter: blur(10px);
             overflow-y: auto;
-            padding: 2rem 0;
+            padding: 1rem;
         }
 
         .game-modal.active {
-            display: flex;
+            display: block;
         }
 
         .game-container {
             max-width: 900px;
-            width: 95%;
-            padding: 2rem;
-            margin: auto;
+            margin: 0 auto;
+            padding-top: 1rem;
         }
 
-
+        .game-header {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
 
         .game-stats {
             display: flex;
             justify-content: center;
-            gap: clamp(1.5rem, 8vw, 3rem);
-            margin: 2rem 0;
+            gap: 2rem;
+            flex-wrap: wrap;
         }
 
         .stat {
@@ -364,22 +497,63 @@
 
         .stat-label {
             color: var(--gray-400);
-            font-size: clamp(0.8rem, 2.5vw, 0.9rem);
-            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+            margin-bottom: 0.25rem;
         }
 
         .stat-value {
-            font-size: clamp(1.5rem, 5vw, 2rem);
+            font-size: 1.75rem;
             font-weight: 700;
             color: var(--accent);
+        }
+
+        .game-controls {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: var(--white);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #3B82F6, #1E40AF);
+        }
+
+        .btn-exit {
+            background: linear-gradient(135deg, var(--danger), #DC2626);
+        }
+
+        .btn-menu {
+            background: linear-gradient(135deg, var(--accent), #D97706);
         }
 
         .game-canvas {
             position: relative;
             width: 100%;
-            max-width: min(700px, 95vw);
+            max-width: 700px;
             height: clamp(400px, 60vh, 500px);
-            margin: 2rem auto;
+            margin: 0 auto 1.5rem;
             background: var(--darker);
             border-radius: 20px;
             overflow: hidden;
@@ -392,20 +566,16 @@
             position: absolute;
             top: 0;
             height: 100%;
-            background: transparent;
+            width: 50%;
             z-index: 20;
-            touch-action: none;
-            user-select: none;
         }
 
         .touch-zone-left {
             left: 0;
-            width: 50%;
         }
 
         .touch-zone-right {
             right: 0;
-            width: 50%;
         }
 
         .road {
@@ -415,7 +585,7 @@
             transform: translateX(-50%);
             width: min(350px, 70%);
             height: 100%;
-            background: linear-gradient(0deg, #333333 0%, #222222 100%);
+            background: linear-gradient(0deg, #333 0%, #222 100%);
             border-left: 3px solid var(--white);
             border-right: 3px solid var(--white);
         }
@@ -427,13 +597,7 @@
             transform: translateX(-50%);
             width: 6px;
             height: 100%;
-            background: repeating-linear-gradient(
-                to bottom,
-                var(--white) 0px,
-                var(--white) 30px,
-                transparent 30px,
-                transparent 60px
-            );
+            background: repeating-linear-gradient(to bottom, var(--white) 0px, var(--white) 30px, transparent 30px, transparent 60px);
             animation: roadMove 2s linear infinite;
         }
 
@@ -444,7 +608,7 @@
 
         .car {
             position: absolute;
-            bottom: clamp(60px, 15%, 80px);
+            bottom: 80px;
             left: 35%;
             width: clamp(35px, 8%, 50px);
             height: clamp(60px, 15%, 90px);
@@ -702,59 +866,6 @@
             50% { transform: translate(-50%, -50%) scale(1.2); }
         }
 
-        .game-controls {
-            margin: 2rem 0;
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            color: var(--white);
-            border: none;
-            padding: 1rem 2rem;
-            border-radius: 50px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            min-width: 140px;
-        }
-
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
-        }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .btn-secondary {
-            background: linear-gradient(135deg, #3B82F6, #1E40AF);
-            border: none;
-        }
-
-        .btn-secondary:hover {
-            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
-        }
-
-        .btn-exit {
-            background: linear-gradient(135deg, var(--danger), #DC2626);
-        }
-
-        .btn-menu {
-            background: linear-gradient(135deg, var(--accent), #D97706);
-        }
-
-        .btn-menu:hover {
-            box-shadow: 0 10px 30px rgba(255, 193, 7, 0.4);
-        }
-
         .game-over {
             position: absolute;
             top: 50%;
@@ -795,14 +906,13 @@
         }
 
         .car-selector {
-            margin: 2rem 0;
+            margin: 1.5rem 0;
             text-align: center;
-            transition: all 0.3s ease;
         }
 
         .car-selector h4 {
             color: var(--primary);
-            font-size: 1.1rem;
+            font-size: 1rem;
             margin-bottom: 1rem;
         }
 
@@ -821,9 +931,6 @@
             transition: all 0.3s ease;
             border: 3px solid transparent;
             position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .car-option:hover {
@@ -939,17 +1046,45 @@
             .audio-controls {
                 top: 80px;
             }
+            
+            .btn {
+                padding: 0.65rem 1.25rem;
+                font-size: 0.85rem;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Audio Controls -->
     <div class="audio-controls">
-        <button class="audio-btn" id="musicBtn" title="Música">🎵</button>
-        <button class="audio-btn" id="soundBtn" title="Efectos">🔊</button>
+        <button class="audio-btn" id="volumeBtn" title="Volumen">🎧</button>
     </div>
 
-    <!-- Navigation -->
+    <div class="volume-panel" id="volumePanel">
+        <h4>Control de Volumen</h4>
+        <div class="volume-control">
+            <div class="volume-row">
+                <button class="mute-btn" id="musicMuteBtn" title="Silenciar musica">🎵</button>
+                <div class="volume-slider-container">
+                    <div class="volume-label">
+                        <span>Musica</span>
+                        <span class="volume-value" id="musicVolumeValue">30%</span>
+                    </div>
+                    <input type="range" min="0" max="100" value="30" class="volume-slider" id="musicVolume">
+                </div>
+            </div>
+            <div class="volume-row">
+                <button class="mute-btn" id="soundMuteBtn" title="Silenciar efectos">🔊</button>
+                <div class="volume-slider-container">
+                    <div class="volume-label">
+                        <span>Efectos</span>
+                        <span class="volume-value" id="soundVolumeValue">50%</span>
+                    </div>
+                    <input type="range" min="0" max="100" value="50" class="volume-slider" id="soundVolume">
+                </div>
+            </div>
+        </div>
+    </div>
+
     <nav>
         <div class="nav-container">
             <div class="logo">
@@ -959,16 +1094,15 @@
         </div>
     </nav>
 
-    <!-- Main Content -->
     <main>
         <div class="container">
             <div class="hero">
                 <h1 class="hero-title">BrightWay</h1>
                 <p class="hero-subtitle">Dale luz a tu camino</p>
                 <p class="hero-description">
-                    BrightWay vela por tu seguridad al implementar tecnologías modernas y buenas para el ambiente. 
-                    Un innovador sistema de señalización vial que combina un trafitambo tradicional con tecnología 
-                    solar avanzada, proporcionando iluminación autónoma y sostenible para mejorar la seguridad vial.
+                    BrightWay vela por tu seguridad al implementar tecnologias modernas y buenas para el ambiente. 
+                    Un innovador sistema de senalizacion vial que combina un trafitambo tradicional con tecnologia 
+                    solar avanzada, proporcionando iluminacion autonoma y sostenible para mejorar la seguridad vial.
                 </p>
             </div>
 
@@ -996,31 +1130,30 @@
             <div class="container">
                 <div class="features-grid">
                     <div class="feature-card">
-                        <div class="feature-icon">☀️</div>
-                        <h3 class="feature-title">Energía Solar</h3>
-                        <p class="feature-description">Panel solar móvil con servomotores para optimizar la captación de energía durante todo el día.</p>
+                        <div class="feature-icon">☀</div>
+                        <h3 class="feature-title">Energia Solar</h3>
+                        <p class="feature-description">Panel solar movil con servomotores para optimizar la captacion de energia durante todo el dia.</p>
                     </div>
                     <div class="feature-card">
                         <div class="feature-icon">💡</div>
-                        <h3 class="feature-title">Iluminación LED</h3>
-                        <p class="feature-description">Sistema de LEDs de alta eficiencia con sensor de movimiento para máxima visibilidad nocturna.</p>
+                        <h3 class="feature-title">Iluminacion LED</h3>
+                        <p class="feature-description">Sistema de LEDs de alta eficiencia con sensor de movimiento para maxima visibilidad nocturna.</p>
                     </div>
                     <div class="feature-card">
                         <div class="feature-icon">🌱</div>
                         <h3 class="feature-title">Eco-Amigable</h3>
-                        <p class="feature-description">Tecnología 100% sustentable que no requiere conexión eléctrica externa.</p>
+                        <p class="feature-description">Tecnologia 100% sustentable que no requiere conexion electrica externa.</p>
                     </div>
                     <div class="feature-card">
                         <div class="feature-icon">🔧</div>
                         <h3 class="feature-title">Arduino Nano</h3>
-                        <p class="feature-description">Control inteligente mediante microcontrolador para gestión automática del sistema.</p>
+                        <p class="feature-description">Control inteligente mediante microcontrolador para gestion automatica del sistema.</p>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Footer -->
     <footer>
         <div class="container">
             <div class="footer-logo">
@@ -1028,30 +1161,37 @@
                 <span class="company-name">BrightWay Technologies</span>
             </div>
             <div class="creators">
-                Desarrollado por: <strong>Pablo Nicolás García Huerta</strong> y <strong>Ángel Antonio Ruiz García</strong>
+                Desarrollado por: <strong>Pablo Nicolas Garcia Huerta</strong> y <strong>Angel Antonio Ruiz Garcia</strong>
             </div>
-            <div class="university">Universidad Autónoma de Querétaro - Facultad de Ingeniería</div>
+            <div class="university">Universidad Autonoma de Queretaro - Facultad de Ingenieria</div>
             <div class="copyright">
-                © 2024 BrightWay Technologies. Todos los derechos reservados.
+                &copy; 2024 BrightWay Technologies. Todos los derechos reservados.
             </div>
         </div>
     </footer>
 
-    <!-- Game Modal -->
     <div class="game-modal" id="gameModal">
         <div class="game-container">
-            <div class="game-stats">
-                <div class="stat">
-                    <div class="stat-label">Puntos</div>
-                    <div class="stat-value" id="score">0</div>
+            <div class="game-header">
+                <div class="game-stats">
+                    <div class="stat">
+                        <div class="stat-label">Puntos</div>
+                        <div class="stat-value" id="score">0</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-label">Record</div>
+                        <div class="stat-value" id="highScore">0</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-label">Vidas</div>
+                        <div class="stat-value" id="lives">3</div>
+                    </div>
                 </div>
-                <div class="stat">
-                    <div class="stat-label">Récord</div>
-                    <div class="stat-value" id="highScore">0</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-label">Vidas</div>
-                    <div class="stat-value" id="lives">3</div>
+                
+                <div class="game-controls">
+                    <button class="btn btn-secondary" id="pauseBtn" disabled>Pausar</button>
+                    <button class="btn btn-exit" id="exitBtn" disabled>Reiniciar</button>
+                    <button class="btn btn-menu" id="menuBtn">Menu</button>
                 </div>
             </div>
             
@@ -1073,7 +1213,7 @@
                 <div class="speed-indicator" id="speedIndicator">Velocidad: 1x</div>
                 <div class="game-over" id="gameOver">
                     <h3>¡Juego Terminado!</h3>
-                    <div class="final-score">Puntuación: <span id="finalScore">0</span></div>
+                    <div class="final-score">Puntuacion: <span id="finalScore">0</span></div>
                     <button class="btn" onclick="resetGame()">Jugar de Nuevo</button>
                 </div>
             </div>
@@ -1086,46 +1226,39 @@
                     <div class="car-option yellow" data-color="yellow"></div>
                 </div>
             </div>
-            
-            <div class="game-controls">
-                <button class="btn btn-secondary" id="pauseBtn" disabled>Pausar</button>
-                <button class="btn btn-exit" id="exitBtn" disabled>Reiniciar Juego</button>
-                <button class="btn btn-menu" id="menuBtn">Volver al Menú Principal</button>
-            </div>
         </div>
     </div>
 
-    <!-- Instructions Modal -->
     <div class="game-modal" id="instructionsModal">
         <div class="game-container">
-            <h2 class="hero-title" style="font-size: 2.5rem; text-align: center; margin-bottom: 2rem;">Cómo Jugar</h2>
+            <h2 class="hero-title" style="font-size: 2.5rem; text-align: center; margin-bottom: 2rem;">Como Jugar</h2>
             
             <div class="instructions" style="max-width: 700px;">
                 <h4>Objetivo:</h4>
-                <p>Conduce tu auto esquivando obstáculos que caen desde arriba y activa el BrightWay para iluminar el camino y ver los autos de colores.</p>
+                <p>Conduce tu auto esquivando obstaculos que caen desde arriba y activa el BrightWay para iluminar el camino y ver los autos de colores.</p>
                 
                 <h4 style="margin-top: 1.5rem;">Controles PC:</h4>
                 <p>• Usa las flechas <strong>← →</strong> para cambiar de carril izquierdo o derecho</p>
-                <p>• Presiona <strong>ESPACIO</strong> para activar el poste BrightWay y ver los obstáculos iluminados</p>
-                <p>• El juego inicia automáticamente al presionar una flecha</p>
+                <p>• Presiona <strong>ESPACIO</strong> para activar el poste BrightWay y ver los obstaculos iluminados</p>
+                <p>• El juego inicia automaticamente al presionar una flecha</p>
                 
-                <h4 style="margin-top: 1.5rem;">Controles Móvil:</h4>
+                <h4 style="margin-top: 1.5rem;">Controles Movil:</h4>
                 <p>• Toca la <strong>mitad izquierda</strong> de la pantalla para ir al carril izquierdo</p>
                 <p>• Toca la <strong>mitad derecha</strong> de la pantalla para ir al carril derecho</p>
                 <p>• Toca el <strong>poste BrightWay</strong> (lado derecho) para activarlo</p>
-                <p>• El juego inicia automáticamente al tocar para cambiar de carril</p>
+                <p>• El juego inicia automaticamente al tocar para cambiar de carril</p>
                 
-                <h4 style="margin-top: 1.5rem;">Puntuación:</h4>
+                <h4 style="margin-top: 1.5rem;">Puntuacion:</h4>
                 <p>• Ganas <strong>puntos por tiempo</strong> mientras juegas</p>
-                <p>• Obtén <strong>puntos extra</strong> por esquivar obstáculos exitosamente</p>
+                <p>• Obten <strong>puntos extra</strong> por esquivar obstaculos exitosamente</p>
                 <p>• Activa el BrightWay para <strong>bonus de puntos</strong> masivos</p>
                 <p>• La velocidad aumenta progresivamente cada 10 segundos</p>
                 
-                <h4 style="margin-top: 1.5rem;">Características Especiales:</h4>
-                <p>• Cuando activas el BrightWay, todos los obstáculos se convierten en <strong>autos de colores</strong> por 4 segundos</p>
+                <h4 style="margin-top: 1.5rem;">Caracteristicas Especiales:</h4>
+                <p>• Cuando activas el BrightWay, todos los obstaculos se convierten en <strong>autos de colores</strong> por 4 segundos</p>
                 <p>• Puedes elegir el <strong>color de tu auto</strong> en cualquier momento</p>
-                <p>• Tienes <strong>3 vidas</strong> - ¡Úsalas sabiamente!</p>
-                <p>• Tu récord se guarda automáticamente</p>
+                <p>• Tienes <strong>3 vidas</strong> - ¡Usalas sabiamente!</p>
+                <p>• Tu record se guarda automaticamente</p>
             </div>
             
             <div style="text-align: center; margin-top: 2rem;">
@@ -1135,146 +1268,127 @@
     </div>
 
     <script>
-        // Audio System
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        let musicEnabled = false;
+        let musicEnabled = true;
         let soundEnabled = true;
         let backgroundMusic = null;
+        let musicVolume = 0.3;
+        let soundVolume = 0.5;
+        let volumePanelOpen = false;
 
         function playClickSound() {
             if (!soundEnabled) return;
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-            
-            oscillator.frequency.value = 800;
-            oscillator.type = 'sine';
-            
-            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
-            
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + 0.1);
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
+            osc.frequency.value = 800;
+            osc.type = 'sine';
+            gain.gain.setValueAtTime(0.3 * soundVolume, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+            osc.start(audioContext.currentTime);
+            osc.stop(audioContext.currentTime + 0.1);
         }
 
         function playHitSound() {
             if (!soundEnabled) return;
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-            
-            oscillator.frequency.value = 200;
-            oscillator.type = 'sawtooth';
-            
-            gainNode.gain.setValueAtTime(0.4, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
-            
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + 0.3);
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
+            osc.frequency.value = 200;
+            osc.type = 'sawtooth';
+            gain.gain.setValueAtTime(0.4 * soundVolume, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+            osc.start(audioContext.currentTime);
+            osc.stop(audioContext.currentTime + 0.3);
         }
 
         function playScoreSound() {
             if (!soundEnabled) return;
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-            
-            oscillator.frequency.value = 1200;
-            oscillator.type = 'sine';
-            
-            gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
-            
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + 0.15);
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
+            osc.frequency.value = 1200;
+            osc.type = 'sine';
+            gain.gain.setValueAtTime(0.2 * soundVolume, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
+            osc.start(audioContext.currentTime);
+            osc.stop(audioContext.currentTime + 0.15);
         }
 
         function playBrightWaySound() {
             if (!soundEnabled) return;
             [440, 550, 660].forEach((freq, i) => {
-                const oscillator = audioContext.createOscillator();
-                const gainNode = audioContext.createGain();
-                
-                oscillator.connect(gainNode);
-                gainNode.connect(audioContext.destination);
-                
-                oscillator.frequency.value = freq;
-                oscillator.type = 'sine';
-                
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
+                osc.frequency.value = freq;
+                osc.type = 'sine';
                 const startTime = audioContext.currentTime + (i * 0.1);
-                gainNode.gain.setValueAtTime(0.2, startTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + 0.3);
-                
-                oscillator.start(startTime);
-                oscillator.stop(startTime + 0.3);
+                gain.gain.setValueAtTime(0.2 * soundVolume, startTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.3);
+                osc.start(startTime);
+                osc.stop(startTime + 0.3);
             });
         }
 
         function playSpeedUpSound() {
             if (!soundEnabled) return;
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-            
-            oscillator.type = 'sawtooth';
-            
-            oscillator.frequency.setValueAtTime(150, audioContext.currentTime);
-            oscillator.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 0.5);
-            
-            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-            
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + 0.5);
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(150, audioContext.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 0.5);
+            gain.gain.setValueAtTime(0.3 * soundVolume, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+            osc.start(audioContext.currentTime);
+            osc.stop(audioContext.currentTime + 0.5);
+        }
+
+        function updateMusicVolume() {
+            if (backgroundMusic && backgroundMusic.gainNode) {
+                const adjustedVolume = Math.pow(musicVolume, 1.5) * 0.5;
+                backgroundMusic.gainNode.gain.value = adjustedVolume;
+            }
         }
 
         function startBackgroundMusic() {
             if (!musicEnabled || backgroundMusic) return;
             
             backgroundMusic = {
-                oscillators: [],
                 gainNode: audioContext.createGain()
             };
             
             backgroundMusic.gainNode.connect(audioContext.destination);
-            backgroundMusic.gainNode.gain.value = 0.05;
+            const adjustedVolume = Math.pow(musicVolume, 1.5) * 0.5;
+            backgroundMusic.gainNode.gain.value = adjustedVolume;
             
             const melody = [261.63, 293.66, 329.63, 349.23, 392.00];
             
             function playNote(frequency, duration) {
                 const osc = audioContext.createOscillator();
                 const noteGain = audioContext.createGain();
-                
                 osc.connect(noteGain);
                 noteGain.connect(backgroundMusic.gainNode);
-                
                 osc.frequency.value = frequency;
                 osc.type = 'sine';
-                
                 const now = audioContext.currentTime;
                 noteGain.gain.setValueAtTime(0, now);
-                noteGain.gain.linearRampToValueAtTime(1, now + 0.1);
+                noteGain.gain.linearRampToValueAtTime(0.8, now + 0.1);
                 noteGain.gain.linearRampToValueAtTime(0, now + duration - 0.1);
-                
                 osc.start(now);
                 osc.stop(now + duration);
-                
-                return osc;
             }
             
             function playMelody() {
                 if (!musicEnabled) return;
-                
                 let time = 0;
-                melody.forEach((freq, i) => {
+                melody.forEach((freq) => {
                     setTimeout(() => {
                         if (musicEnabled && backgroundMusic) {
                             playNote(freq, 0.5);
@@ -1282,7 +1396,6 @@
                     }, time);
                     time += 600;
                 });
-                
                 setTimeout(() => {
                     if (musicEnabled && backgroundMusic) {
                         playMelody();
@@ -1300,32 +1413,76 @@
             }
         }
 
-        document.getElementById('musicBtn').addEventListener('click', function() {
+        function toggleVolumePanel() {
+            volumePanelOpen = !volumePanelOpen;
+            const panel = document.getElementById('volumePanel');
+            const btn = document.getElementById('volumeBtn');
+            
+            if (volumePanelOpen) {
+                panel.classList.add('show');
+                btn.classList.add('active');
+            } else {
+                panel.classList.remove('show');
+                btn.classList.remove('active');
+            }
+        }
+
+        document.getElementById('volumeBtn').addEventListener('click', function(e) {
+            e.stopPropagation();
             playClickSound();
+            toggleVolumePanel();
+        });
+
+        document.addEventListener('click', function(e) {
+            const panel = document.getElementById('volumePanel');
+            const btn = document.getElementById('volumeBtn');
+            
+            if (volumePanelOpen && !panel.contains(e.target) && e.target !== btn) {
+                volumePanelOpen = false;
+                panel.classList.remove('show');
+                btn.classList.remove('active');
+            }
+        });
+
+        document.getElementById('musicVolume').addEventListener('input', function(e) {
+            musicVolume = e.target.value / 100;
+            document.getElementById('musicVolumeValue').textContent = e.target.value + '%';
+            updateMusicVolume();
+        });
+
+        document.getElementById('soundVolume').addEventListener('input', function(e) {
+            soundVolume = e.target.value / 100;
+            document.getElementById('soundVolumeValue').textContent = e.target.value + '%';
+            playClickSound();
+        });
+
+        document.getElementById('musicMuteBtn').addEventListener('click', function() {
             musicEnabled = !musicEnabled;
             this.classList.toggle('muted');
-            this.textContent = musicEnabled ? '🎵' : '🔇';
-            
+            this.innerHTML = musicEnabled ? '🎵' : '🔇';
             if (musicEnabled) {
                 startBackgroundMusic();
             } else {
                 stopBackgroundMusic();
             }
+            playClickSound();
         });
 
-        document.getElementById('soundBtn').addEventListener('click', function() {
+        document.getElementById('soundMuteBtn').addEventListener('click', function() {
             soundEnabled = !soundEnabled;
             this.classList.toggle('muted');
-            this.textContent = soundEnabled ? '🔊' : '🔇';
+            this.innerHTML = soundEnabled ? '🔊' : '🔇';
             if (soundEnabled) playClickSound();
         });
 
         document.addEventListener('click', function initMusic() {
-            startBackgroundMusic();
-            document.removeEventListener('click', initMusic);
+            if (audioContext.state === 'suspended') {
+                audioContext.resume().then(() => {
+                    if (musicEnabled) startBackgroundMusic();
+                });
+            }
         }, { once: true });
 
-        // Game Variables
         let gameState = {
             running: false,
             paused: false,
@@ -1359,6 +1516,16 @@
             gameState.isMobile = isMobileDevice();
             initGame();
             
+            setTimeout(() => {
+                if (audioContext.state === 'suspended') {
+                    audioContext.resume().then(() => {
+                        startBackgroundMusic();
+                    });
+                } else {
+                    startBackgroundMusic();
+                }
+            }, 500);
+            
             document.getElementById('playGameBtn').addEventListener('click', function() {
                 playClickSound();
                 document.getElementById('gameModal').classList.add('active');
@@ -1391,12 +1558,12 @@
                 menuBtn: document.getElementById('menuBtn'),
                 speedIndicator: document.getElementById('speedIndicator'),
                 touchLeft: document.getElementById('touchLeft'),
-                touchRight: document.getElementById('touchRight'),
-                carSelector: document.querySelector('.car-selector')
+                touchRight: document.getElementById('touchRight')
             };
 
-            gameState.highScore = parseInt(localStorage.getItem('brightwayHighScore') || '0');
-            gameElements.highScore.textContent = gameState.highScore;
+            const savedHighScore = parseInt(localStorage.getItem('brightwayHighScore') || '0');
+            gameState.highScore = savedHighScore;
+            gameElements.highScore.textContent = savedHighScore;
 
             setupEventListeners();
             setupCarColorSelector();
@@ -1406,15 +1573,12 @@
 
         function setupCarColorSelector() {
             const carOptions = document.querySelectorAll('.car-option');
-            
             carOptions.forEach(option => {
                 option.addEventListener('click', (e) => {
                     e.preventDefault();
                     playClickSound();
-                    
                     carOptions.forEach(opt => opt.classList.remove('active'));
                     option.classList.add('active');
-                    
                     gameState.carColor = option.dataset.color;
                     updateCarColor();
                 });
@@ -1428,38 +1592,30 @@
                 red: 'linear-gradient(0deg, #EF4444, #DC2626)',
                 yellow: 'linear-gradient(0deg, #F59E0B, #D97706)'
             };
-            
             car.style.background = colorMap[gameState.carColor];
-            
             const shadowMap = {
                 blue: '0 5px 20px rgba(59, 130, 246, 0.4)',
                 red: '0 5px 20px rgba(239, 68, 68, 0.4)',
                 yellow: '0 5px 20px rgba(245, 158, 11, 0.4)'
             };
-            
             car.style.boxShadow = shadowMap[gameState.carColor];
         }
 
         function setupEventListeners() {
             document.addEventListener('keydown', handleKeyDown);
-            
             gameElements.pauseBtn.addEventListener('click', () => {
                 playClickSound();
                 togglePause();
             });
-            
             gameElements.exitBtn.addEventListener('click', () => {
                 playClickSound();
                 resetGame();
             });
-            
             gameElements.menuBtn.addEventListener('click', () => {
                 playClickSound();
                 returnToMenu();
             });
-            
             setupTouchControls();
-            
             gameElements.brightwayPost.addEventListener('click', () => {
                 playBrightWaySound();
                 activateBrightWay();
@@ -1511,9 +1667,7 @@
                     return;
                 }
             }
-            
             if (!gameState.running || gameState.paused) return;
-            
             switch(e.key) {
                 case 'ArrowLeft':
                     e.preventDefault();
@@ -1535,7 +1689,6 @@
 
         function startGame() {
             if (gameState.running) return;
-
             gameState = {
                 ...gameState,
                 running: true,
@@ -1550,19 +1703,15 @@
                 obstacleSpawnRate: gameState.baseObstacleSpawnRate,
                 frameCounter: 0
             };
-
             updateUI();
             gameElements.pauseBtn.disabled = false;
             gameElements.exitBtn.disabled = false;
             gameElements.gameOver.classList.remove('show');
-            
             clearObstacles();
-            
             gameElements.car.className = 'car';
             gameElements.lightEffect.classList.remove('active');
             gameElements.carLights.style.opacity = '0.4';
             gameElements.gameCanvas.style.background = 'var(--darker)';
-
             updateSpeedIndicator();
             updateCarColor();
             gameLoop = setInterval(updateGame, 1000 / 60);
@@ -1570,34 +1719,27 @@
 
         function updateGame() {
             if (!gameState.running || gameState.paused) return;
-
             gameState.frameCounter++;
-
             gameState.score += gameState.brightwayActive ? 3 : 1;
             gameElements.score.textContent = Math.floor(gameState.score / 60);
-
             if (gameState.frameCounter % 600 === 0) {
                 increaseGameSpeed();
             }
-
             if (gameState.frameCounter % gameState.obstacleSpawnRate === 0) {
                 spawnObstacle();
             }
-
             updateObstacles();
             checkCollisions();
         }
 
         function increaseGameSpeed() {
             gameState.speedMultiplier = Math.min(gameState.speedMultiplier + 0.3, 6);
-            
             gameState.gameSpeed = gameState.baseGameSpeed * gameState.speedMultiplier;
             gameState.gameSpeed = Math.min(gameState.gameSpeed, gameState.maxGameSpeed);
             
-            gameState.obstacleSpawnRate = Math.max(
-                gameState.baseObstacleSpawnRate - (gameState.speedMultiplier * 15),
-                gameState.minObstacleSpawnRate
-            );
+            // Asegurar que obstacleSpawnRate siempre sea un número válido
+            const calculatedRate = gameState.baseObstacleSpawnRate - (gameState.speedMultiplier * 15);
+            gameState.obstacleSpawnRate = Math.max(Math.floor(calculatedRate), gameState.minObstacleSpawnRate);
             
             updateSpeedIndicator();
             flashSpeedIndicator();
@@ -1605,14 +1747,12 @@
         }
 
         function updateSpeedIndicator() {
-            const speedText = `Velocidad: ${gameState.speedMultiplier.toFixed(1)}x`;
-            gameElements.speedIndicator.textContent = speedText;
+            gameElements.speedIndicator.textContent = `Velocidad: ${gameState.speedMultiplier.toFixed(1)}x`;
         }
 
         function flashSpeedIndicator() {
             gameElements.speedIndicator.style.background = 'rgba(255, 193, 7, 0.4)';
             gameElements.speedIndicator.style.transform = 'scale(1.1)';
-            
             setTimeout(() => {
                 gameElements.speedIndicator.style.background = 'rgba(255, 107, 53, 0.2)';
                 gameElements.speedIndicator.style.transform = 'scale(1)';
@@ -1622,10 +1762,8 @@
         function spawnObstacle() {
             const obstacle = document.createElement('div');
             obstacle.className = 'obstacle';
-            
             const availableLanes = ['left', 'right'];
             const recentObstacles = gameState.obstacles.filter(obs => obs.y < 200);
-            
             let lane;
             if (recentObstacles.length > 0) {
                 const existingLane = recentObstacles[0].lane;
@@ -1633,14 +1771,11 @@
             } else {
                 lane = availableLanes[Math.floor(Math.random() * availableLanes.length)];
             }
-            
             obstacle.classList.add('lane-' + lane);
-            
             if (gameState.brightwayActive) {
                 const randomColor = carColors[Math.floor(Math.random() * carColors.length)];
                 obstacle.classList.add('car-' + randomColor);
             }
-            
             gameElements.gameCanvas.appendChild(obstacle);
             gameState.obstacles.push({ 
                 element: obstacle, 
@@ -1653,15 +1788,29 @@
 
         function updateObstacles() {
             gameState.obstacles = gameState.obstacles.filter(obs => {
-                obs.y += gameState.gameSpeed;
-                obs.element.style.top = obs.y + 'px';
-                
-                if (obs.y > gameElements.gameCanvas.offsetHeight + 100) {
-                    obs.element.remove();
+                // Si el obstáculo fue golpeado, eliminarlo inmediatamente
+                if (obs.hit) {
+                    if (obs.element && obs.element.parentNode) {
+                        obs.element.remove();
+                    }
                     return false;
                 }
                 
-                if (!obs.passed && obs.y > gameElements.gameCanvas.offsetHeight - 200) {
+                obs.y += gameState.gameSpeed;
+                if (obs.element) {
+                    obs.element.style.top = obs.y + 'px';
+                }
+                
+                // Eliminar obstáculos que salieron de la pantalla
+                if (obs.y > gameElements.gameCanvas.offsetHeight + 100) {
+                    if (obs.element && obs.element.parentNode) {
+                        obs.element.remove();
+                    }
+                    return false;
+                }
+                
+                // Dar puntos por esquivar
+                if (!obs.passed && !obs.hit && obs.y > gameElements.gameCanvas.offsetHeight - 200) {
                     obs.passed = true;
                     gameState.score += 30 * gameState.speedMultiplier;
                     playScoreSound();
@@ -1672,17 +1821,32 @@
         }
 
         function checkCollisions() {
-            const carY = gameElements.gameCanvas.offsetHeight - 
-                        (gameState.isMobile ? 120 : 170);
+            const carY = gameElements.gameCanvas.offsetHeight - (gameState.isMobile ? 120 : 170);
             
-            gameState.obstacles.forEach(obs => {
+            // Crear una copia del array para iterar de forma segura
+            const obstaclesCopy = [...gameState.obstacles];
+            
+            obstaclesCopy.forEach(obs => {
                 if (obs.hit) return;
                 
                 const collisionMargin = gameState.isMobile ? 35 : 40;
+                
+                // Verificar colisión
                 if (obs.lane === gameState.carLane && 
                     obs.y >= carY - collisionMargin && obs.y <= carY + collisionMargin) {
-                    
                     obs.hit = true;
+                    
+                    // Eliminar el obstáculo inmediatamente del DOM
+                    if (obs.element && obs.element.parentNode) {
+                        obs.element.remove();
+                    }
+                    
+                    // Eliminar del array de obstáculos
+                    const index = gameState.obstacles.indexOf(obs);
+                    if (index > -1) {
+                        gameState.obstacles.splice(index, 1);
+                    }
+                    
                     hitObstacle();
                 }
             });
@@ -1691,7 +1855,6 @@
         function changeLane(newLane) {
             if (!gameState.running || gameState.paused) return;
             if (gameState.carLane === newLane) return;
-            
             gameState.carLane = newLane;
             gameElements.car.classList.remove('lane-left', 'lane-right');
             gameElements.car.classList.add('lane-' + newLane);
@@ -1699,25 +1862,20 @@
 
         function activateBrightWay() {
             if (!gameState.running || gameState.brightwayActive) return;
-            
             gameState.brightwayActive = true;
             gameElements.lightEffect.classList.add('active');
             gameElements.carLights.style.opacity = '1';
             gameElements.gameCanvas.style.background = 'linear-gradient(135deg, #2A2A2A 0%, #1A1A1A 100%)';
-            
             gameState.score += 150 * gameState.speedMultiplier;
-            
             gameState.obstacles.forEach(obs => {
                 const randomColor = carColors[Math.floor(Math.random() * carColors.length)];
                 obs.element.classList.add('car-' + randomColor);
             });
-            
             setTimeout(() => {
                 gameState.brightwayActive = false;
                 gameElements.lightEffect.classList.remove('active');
                 gameElements.carLights.style.opacity = '0.4';
                 gameElements.gameCanvas.style.background = 'var(--darker)';
-                
                 gameState.obstacles.forEach(obs => {
                     carColors.forEach(color => {
                         obs.element.classList.remove('car-' + color);
@@ -1730,27 +1888,24 @@
             gameState.lives--;
             gameElements.lives.textContent = gameState.lives;
             playHitSound();
-            
             const colorMap = {
                 blue: 'linear-gradient(0deg, var(--blue), #1E40AF)',
                 red: 'linear-gradient(0deg, #EF4444, #DC2626)',
                 yellow: 'linear-gradient(0deg, #F59E0B, #D97706)'
             };
-            
             const shadowMap = {
                 blue: '0 5px 20px rgba(59, 130, 246, 0.4)',
                 red: '0 5px 20px rgba(239, 68, 68, 0.4)',
                 yellow: '0 5px 20px rgba(245, 158, 11, 0.4)'
             };
-            
             gameElements.car.style.background = 'linear-gradient(0deg, var(--danger), #DC2626)';
             gameElements.car.style.boxShadow = '0 0 25px var(--danger)';
-            
             setTimeout(() => {
-                gameElements.car.style.background = colorMap[gameState.carColor];
-                gameElements.car.style.boxShadow = shadowMap[gameState.carColor];
+                if (gameState.running) {
+                    gameElements.car.style.background = colorMap[gameState.carColor];
+                    gameElements.car.style.boxShadow = shadowMap[gameState.carColor];
+                }
             }, 600);
-            
             if (gameState.lives <= 0) {
                 endGame();
             }
@@ -1758,7 +1913,6 @@
 
         function togglePause() {
             if (!gameState.running) return;
-            
             gameState.paused = !gameState.paused;
             gameElements.pauseBtn.textContent = gameState.paused ? 'Reanudar' : 'Pausar';
         }
@@ -1766,17 +1920,14 @@
         function endGame() {
             gameState.running = false;
             clearInterval(gameLoop);
-            
             const finalScore = Math.floor(gameState.score / 60);
             if (finalScore > gameState.highScore) {
                 gameState.highScore = finalScore;
                 gameElements.highScore.textContent = gameState.highScore;
                 localStorage.setItem('brightwayHighScore', gameState.highScore.toString());
             }
-            
             gameElements.finalScore.textContent = finalScore;
             gameElements.gameOver.classList.add('show');
-            
             gameElements.pauseBtn.disabled = true;
             gameElements.exitBtn.disabled = true;
             gameElements.pauseBtn.textContent = 'Pausar';
@@ -1786,42 +1937,17 @@
             if (gameLoop) clearInterval(gameLoop);
             gameState.running = false;
             gameState.paused = false;
-            
             clearObstacles();
             gameElements.gameOver.classList.remove('show');
-            
             gameElements.pauseBtn.disabled = true;
             gameElements.exitBtn.disabled = true;
             gameElements.pauseBtn.textContent = 'Pausar';
-            
             gameState.score = 0;
             gameState.lives = 1;
             gameState.speedMultiplier = 1;
             updateUI();
             updateSpeedIndicator();
-            
             document.getElementById('gameModal').classList.remove('active');
-        }
-
-        function exitGame() {
-            if (!gameState.running) return;
-            
-            if (gameLoop) clearInterval(gameLoop);
-            gameState.running = false;
-            gameState.paused = false;
-            
-            clearObstacles();
-            gameElements.gameOver.classList.remove('show');
-            
-            gameElements.pauseBtn.disabled = true;
-            gameElements.exitBtn.disabled = true;
-            gameElements.pauseBtn.textContent = 'Pausar';
-            
-            gameState.score = 0;
-            gameState.lives = 1;
-            gameState.speedMultiplier = 1;
-            updateUI();
-            updateSpeedIndicator();
         }
 
         function resetGame() {
@@ -1833,29 +1959,12 @@
             startGame();
         }
 
-        function returnToMenu() {
-            if (gameLoop) clearInterval(gameLoop);
-            gameState.running = false;
-            gameState.paused = false;
-            
-            clearObstacles();
-            gameElements.gameOver.classList.remove('show');
-            
-            gameElements.pauseBtn.disabled = true;
-            gameElements.exitBtn.disabled = true;
-            gameElements.pauseBtn.textContent = 'Pausar';
-            
-            gameState.score = 0;
-            gameState.lives = 1;
-            gameState.speedMultiplier = 1;
-            updateUI();
-            updateSpeedIndicator();
-            
-            document.getElementById('gameModal').classList.remove('active');
-        }
-
         function clearObstacles() {
-            gameState.obstacles.forEach(obs => obs.element.remove());
+            gameState.obstacles.forEach(obs => {
+                if (obs.element && obs.element.parentNode) {
+                    obs.element.remove();
+                }
+            });
             gameState.obstacles = [];
         }
 
