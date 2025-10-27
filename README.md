@@ -544,6 +544,31 @@
             margin-left: 3px;
         }
 
+        .shield-indicator {
+            background: rgba(59, 130, 246, 0.2);
+            border: 2px solid var(--shield);
+            display: none;
+        }
+
+        .shield-indicator.active {
+            display: block;
+            animation: shieldPulse 1s ease-in-out infinite;
+        }
+
+        .shield-indicator.warning {
+            animation: shieldBlink 0.3s ease-in-out infinite;
+        }
+
+        @keyframes shieldPulse {
+            0%, 100% { box-shadow: 0 0 25px rgba(59, 130, 246, 0.6); }
+            50% { box-shadow: 0 0 45px rgba(59, 130, 246, 0.9); }
+        }
+
+        @keyframes shieldBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
         .game-controls {
             position: absolute;
             bottom: 15px;
@@ -593,34 +618,9 @@
             animation: pulse 1s ease-in-out infinite;
         }
 
-        .btn-shield {
-            background: linear-gradient(135deg, var(--shield), #2563EB);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-shield.active {
-            animation: shieldPulse 1s ease-in-out infinite;
-            box-shadow: 0 0 30px rgba(59, 130, 246, 0.8);
-        }
-
-        .btn-shield.blink {
-            animation: shieldBlink 0.3s ease-in-out infinite;
-        }
-
         @keyframes pulse {
             0%, 100% { box-shadow: 0 0 25px rgba(255, 193, 7, 0.6); }
             50% { box-shadow: 0 0 45px rgba(255, 193, 7, 0.9); }
-        }
-
-        @keyframes shieldPulse {
-            0%, 100% { box-shadow: 0 0 25px rgba(59, 130, 246, 0.6); }
-            50% { box-shadow: 0 0 45px rgba(59, 130, 246, 0.9); }
-        }
-
-        @keyframes shieldBlink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
         }
 
         .selector-screen {
@@ -649,7 +649,7 @@
             border: 3px solid var(--primary);
             text-align: center;
             max-width: 90%;
-            width: 600px;
+            width: 700px;
             max-height: 90vh;
             overflow-y: auto;
         }
@@ -717,6 +717,10 @@
 
         .map-preview.volcano {
             background: linear-gradient(135deg, #450a0a, #7f1d1d);
+        }
+
+        .map-preview.desert {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
         }
 
         .car-preview {
@@ -855,6 +859,30 @@
             font-size: 1rem;
             margin-bottom: 0.8rem;
             line-height: 1.6;
+        }
+
+        .combo-indicator {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--accent);
+            text-shadow: 0 0 20px rgba(255, 193, 7, 0.8);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        .combo-indicator.show {
+            animation: comboAppear 1s ease-out;
+        }
+
+        @keyframes comboAppear {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
         }
 
         @media (max-width: 768px) {
@@ -1042,6 +1070,10 @@
                             <div class="map-preview volcano">🌋</div>
                             <h3>Volcán Ardiente</h3>
                         </div>
+                        <div class="option-card" data-map="desert">
+                            <div class="map-preview desert">🏜️</div>
+                            <h3>Desierto Dorado</h3>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1079,6 +1111,10 @@
                     <div class="hud-label">Puntos</div>
                     <div class="hud-value" id="score">0</div>
                 </div>
+                <div class="hud-stat shield-indicator" id="shieldIndicator">
+                    <div class="hud-label">🛡️ Escudo</div>
+                    <div class="hud-value" id="shieldTime">10</div>
+                </div>
                 <div class="hud-stat">
                     <div class="hud-label">Record</div>
                     <div class="hud-value" id="highScore">0</div>
@@ -1091,9 +1127,10 @@
                     </div>
                 </div>
             </div>
+
+            <div class="combo-indicator" id="comboIndicator">COMBO x2!</div>
             
             <div class="game-controls">
-                <button class="btn btn-shield" id="shieldBtn">🛡️ Escudo</button>
                 <button class="btn btn-brightway" id="brightwayBtn">💡 BrightWay</button>
                 <button class="btn btn-exit" id="menuBtn">🚪 Salir</button>
                 <button class="btn" id="pauseBtn">⏸ Pausar</button>
@@ -1115,20 +1152,25 @@
                 <p>• <strong>← →</strong> - Mover el auto izquierda/derecha</p>
                 <p>• <strong>↑ ↓</strong> - Acelerar/Frenar</p>
                 <p>• <strong>ESPACIO</strong> - Activar BrightWay (iluminación especial)</p>
-                <p>• <strong>S</strong> - Activar Escudo (protección 10 segundos)</p>
                 
                 <h4 style="margin-top: 1.5rem;">Móvil/Táctil:</h4>
                 <p>• Tocar izquierda/derecha de la pantalla para girar</p>
-                <p>• Botón 🛡️ Escudo para protección temporal</p>
                 <p>• Botón 💡 BrightWay para activar iluminación</p>
                 <p>• El auto acelera automáticamente</p>
                 
-                <h4 style="margin-top: 1.5rem;">Poderes:</h4>
-                <p>• <strong>🛡️ Escudo:</strong> Te protege de choques por 10 segundos. Parpadea cuando está por acabarse.</p>
+                <h4 style="margin-top: 1.5rem;">Poderes y Objetos:</h4>
+                <p>• <strong>🛡️ Escudo (Recolectable):</strong> Aparece en la carretera. Recógelo para obtener protección de 10 segundos. El campo parpadea cuando está por acabarse.</p>
                 <p>• <strong>💡 BrightWay:</strong> Ilumina el camino y otorga puntos extra por 5 segundos.</p>
+                <p>• <strong>⭐ Combo:</strong> Recolecta escudos consecutivamente para multiplicar tus puntos.</p>
+                
+                <h4 style="margin-top: 1.5rem;">Características Nuevas:</h4>
+                <p>• <strong>Mapa Desierto:</strong> Nuevo escenario con dunas y tormentas de arena</p>
+                <p>• <strong>Sistema de Combos:</strong> Recolecta objetos seguidos para bonificaciones</p>
+                <p>• <strong>Dificultad Progresiva:</strong> Más obstáculos a mayor velocidad</p>
                 
                 <h4 style="margin-top: 1.5rem;">Objetivo:</h4>
                 <p>• Esquiva los obstáculos en la carretera</p>
+                <p>• Recolecta escudos para protección temporal</p>
                 <p>• Usa los poderes estratégicamente</p>
                 <p>• La velocidad aumenta progresivamente sin límite</p>
                 <p>• ¡Consigue el máximo puntaje!</p>
@@ -1275,6 +1317,23 @@
             });
         }
 
+        function playComboSound() {
+            if (!soundOn) return;
+            [600, 800, 1000, 1200].forEach((freq, i) => {
+                const o = audioCtx.createOscillator();
+                const g = audioCtx.createGain();
+                o.connect(g);
+                g.connect(audioCtx.destination);
+                o.frequency.value = freq;
+                o.type = 'triangle';
+                const startTime = audioCtx.currentTime + (i * 0.06);
+                g.gain.setValueAtTime(0.15 * soundVol, startTime);
+                g.gain.exponentialRampToValueAtTime(0.01, startTime + 0.2);
+                o.start(startTime);
+                o.stop(startTime + 0.2);
+            });
+        }
+
         function updateMusicVol() {
             if (bgMusic && bgMusic.g) {
                 bgMusic.g.gain.value = Math.min(musicVol * 1.5, 0.7);
@@ -1330,14 +1389,15 @@
             playMelody();
         }
 
-        let scene, camera, renderer, car, obstacles = [], brightwayPosts = [], particles = [], shieldMesh = null;
+        let scene, camera, renderer, car, obstacles = [], brightwayPosts = [], particles = [], shieldMesh = null, shieldPickups = [];
         let gameState = {
             running: false, paused: false, score: 0, highScore: 0, speed: 0, maxSpeed: 70, 
             acceleration: 0.5, carPosition: 0, carColor: null, mapType: null,
             brightwayActive: false, shieldActive: false, shieldTimeLeft: 0,
-            frameCount: 0, isMobile: window.innerWidth <= 768, obstacleFrequency: 120
+            frameCount: 0, isMobile: window.innerWidth <= 768, obstacleFrequency: 120,
+            combo: 0, lastPickupTime: 0
         };
-        const keys = {left: false, right: false, up: false, down: false, space: false, s: false};
+        const keys = {left: false, right: false, up: false, down: false, space: false};
         const carColorMap = {blue: 0x3B82F6, red: 0xEF4444, yellow: 0xFBBF24, green: 0x059669};
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -1453,11 +1513,14 @@
                 scene.fog = new THREE.Fog(0x0a0a1a, 100, 300);
                 scene.background = new THREE.Color(0x050510);
             } else if (gameState.mapType === 'snow') {
-                scene.fog = new THREE.Fog(0xE0F2FE, 150, 350);
-                scene.background = new THREE.Color(0xBAE6FD);
+                scene.fog = new THREE.Fog(0x0a0a1a, 150, 350);
+                scene.background = new THREE.Color(0x0d1117);
             } else if (gameState.mapType === 'volcano') {
                 scene.fog = new THREE.Fog(0x450a0a, 80, 250);
                 scene.background = new THREE.Color(0x1a0505);
+            } else if (gameState.mapType === 'desert') {
+                scene.fog = new THREE.Fog(0x1a1410, 120, 320);
+                scene.background = new THREE.Color(0x0f0c09);
             }
             
             camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -1480,14 +1543,14 @@
                 const hemisphereLight = new THREE.HemisphereLight(0x1a1a2a, 0x0a0a15, 0.4);
                 scene.add(hemisphereLight);
             } else if (gameState.mapType === 'snow') {
-                const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.7);
+                const ambientLight = new THREE.AmbientLight(0x3a3a50, 0.3);
                 scene.add(ambientLight);
-                const directionalLight = new THREE.DirectionalLight(0xCCE5FF, 0.8);
+                const directionalLight = new THREE.DirectionalLight(0x6a6a80, 0.4);
                 directionalLight.position.set(15, 50, 25);
                 directionalLight.castShadow = true;
                 configureShadow(directionalLight);
                 scene.add(directionalLight);
-                const hemisphereLight = new THREE.HemisphereLight(0xE0F2FE, 0xBAE6FD, 0.5);
+                const hemisphereLight = new THREE.HemisphereLight(0x2a2a3a, 0x1a1a2a, 0.3);
                 scene.add(hemisphereLight);
             } else if (gameState.mapType === 'volcano') {
                 const ambientLight = new THREE.AmbientLight(0xFF4400, 0.3);
@@ -1498,6 +1561,16 @@
                 configureShadow(directionalLight);
                 scene.add(directionalLight);
                 const hemisphereLight = new THREE.HemisphereLight(0x7f1d1d, 0x450a0a, 0.4);
+                scene.add(hemisphereLight);
+            } else if (gameState.mapType === 'desert') {
+                const ambientLight = new THREE.AmbientLight(0x4a3a2a, 0.3);
+                scene.add(ambientLight);
+                const directionalLight = new THREE.DirectionalLight(0x6a5a4a, 0.4);
+                directionalLight.position.set(25, 60, 15);
+                directionalLight.castShadow = true;
+                configureShadow(directionalLight);
+                scene.add(directionalLight);
+                const hemisphereLight = new THREE.HemisphereLight(0x3a2a1a, 0x2a1a0a, 0.3);
                 scene.add(hemisphereLight);
             }
             
@@ -1539,6 +1612,10 @@
                 groundColor = 0x1a0a0a;
                 treeColor = 0x2a1a1a;
                 skyElements = 'lava';
+            } else if (gameState.mapType === 'desert') {
+                groundColor = 0xF4A460;
+                treeColor = 0x8B4513;
+                skyElements = 'sun';
             }
             
             const groundGeo = new THREE.PlaneGeometry(400, 600);
@@ -1554,58 +1631,111 @@
             scene.add(ground);
             
             for (let i = 0; i < 50; i++) {
-                const treeGroup = new THREE.Group();
-                const trunkHeight = 4 + Math.random() * 3;
-                const trunk = new THREE.Mesh(
-                    new THREE.CylinderGeometry(0.4, 0.6, trunkHeight, 8), 
-                    new THREE.MeshStandardMaterial({ 
-                        color: 0x1a1008, 
-                        roughness: 0.9,
-                        metalness: 0
-                    })
-                );
-                trunk.position.y = trunkHeight / 2;
-                trunk.castShadow = true;
-                trunk.receiveShadow = true;
-                treeGroup.add(trunk);
-                
-                const leavesSize = 2 + Math.random() * 1.5;
-                const leavesColor = gameState.mapType === 'snow' ? 0x1a4d2e : treeColor;
-                const leaves = new THREE.Mesh(
-                    new THREE.SphereGeometry(leavesSize, 10, 10), 
-                    new THREE.MeshStandardMaterial({ 
-                        color: leavesColor, 
-                        roughness: 0.85,
-                        metalness: 0
-                    })
-                );
-                leaves.position.y = trunkHeight + leavesSize * 0.5;
-                leaves.castShadow = true;
-                leaves.receiveShadow = true;
-                treeGroup.add(leaves);
-                
-                if (gameState.mapType === 'snow') {
-                    const snow = new THREE.Mesh(
-                        new THREE.SphereGeometry(leavesSize * 1.1, 8, 8),
+                if (gameState.mapType === 'desert') {
+                    const duneGroup = new THREE.Group();
+                    const duneSize = 3 + Math.random() * 4;
+                    const dune = new THREE.Mesh(
+                        new THREE.SphereGeometry(duneSize, 12, 12),
                         new THREE.MeshStandardMaterial({
-                            color: 0xFFFFFF,
-                            roughness: 0.7,
-                            metalness: 0,
-                            transparent: true,
-                            opacity: 0.7
+                            color: 0xEDC967,
+                            roughness: 0.95,
+                            metalness: 0
                         })
                     );
-                    snow.position.y = trunkHeight + leavesSize * 0.5;
-                    treeGroup.add(snow);
+                    dune.scale.y = 0.4;
+                    dune.position.y = -duneSize * 0.3;
+                    dune.castShadow = true;
+                    dune.receiveShadow = true;
+                    duneGroup.add(dune);
+                    
+                    if (Math.random() > 0.7) {
+                        const cactusHeight = 2 + Math.random() * 2;
+                        const cactus = new THREE.Mesh(
+                            new THREE.CylinderGeometry(0.3, 0.3, cactusHeight, 8),
+                            new THREE.MeshStandardMaterial({
+                                color: 0x2E7D32,
+                                roughness: 0.9,
+                                metalness: 0
+                            })
+                        );
+                        cactus.position.y = cactusHeight / 2;
+                        cactus.castShadow = true;
+                        duneGroup.add(cactus);
+                        
+                        const arm = new THREE.Mesh(
+                            new THREE.CylinderGeometry(0.2, 0.2, 0.8, 8),
+                            new THREE.MeshStandardMaterial({
+                                color: 0x2E7D32,
+                                roughness: 0.9,
+                                metalness: 0
+                            })
+                        );
+                        arm.rotation.z = Math.PI / 2;
+                        arm.position.set(0.5, cactusHeight * 0.6, 0);
+                        duneGroup.add(arm);
+                    }
+                    
+                    const side = Math.random() > 0.5 ? 1 : -1;
+                    duneGroup.position.set(
+                        side * (15 + Math.random() * 30),
+                        0,
+                        -Math.random() * 500
+                    );
+                    scene.add(duneGroup);
+                } else {
+                    const treeGroup = new THREE.Group();
+                    const trunkHeight = 4 + Math.random() * 3;
+                    const trunk = new THREE.Mesh(
+                        new THREE.CylinderGeometry(0.4, 0.6, trunkHeight, 8), 
+                        new THREE.MeshStandardMaterial({ 
+                            color: 0x1a1008, 
+                            roughness: 0.9,
+                            metalness: 0
+                        })
+                    );
+                    trunk.position.y = trunkHeight / 2;
+                    trunk.castShadow = true;
+                    trunk.receiveShadow = true;
+                    treeGroup.add(trunk);
+                    
+                    const leavesSize = 2 + Math.random() * 1.5;
+                    const leavesColor = gameState.mapType === 'snow' ? 0x1a4d2e : treeColor;
+                    const leaves = new THREE.Mesh(
+                        new THREE.SphereGeometry(leavesSize, 10, 10), 
+                        new THREE.MeshStandardMaterial({ 
+                            color: leavesColor, 
+                            roughness: 0.85,
+                            metalness: 0
+                        })
+                    );
+                    leaves.position.y = trunkHeight + leavesSize * 0.5;
+                    leaves.castShadow = true;
+                    leaves.receiveShadow = true;
+                    treeGroup.add(leaves);
+                    
+                    if (gameState.mapType === 'snow') {
+                        const snow = new THREE.Mesh(
+                            new THREE.SphereGeometry(leavesSize * 1.1, 8, 8),
+                            new THREE.MeshStandardMaterial({
+                                color: 0xFFFFFF,
+                                roughness: 0.7,
+                                metalness: 0,
+                                transparent: true,
+                                opacity: 0.7
+                            })
+                        );
+                        snow.position.y = trunkHeight + leavesSize * 0.5;
+                        treeGroup.add(snow);
+                    }
+                    
+                    const side = Math.random() > 0.5 ? 1 : -1;
+                    treeGroup.position.set(
+                        side * (15 + Math.random() * 30), 
+                        0, 
+                        -Math.random() * 500
+                    );
+                    scene.add(treeGroup);
                 }
-                
-                const side = Math.random() > 0.5 ? 1 : -1;
-                treeGroup.position.set(
-                    side * (15 + Math.random() * 30), 
-                    0, 
-                    -Math.random() * 500
-                );
-                scene.add(treeGroup);
             }
             
             if (skyElements === 'stars') {
@@ -1648,6 +1778,27 @@
                 );
                 moonGlow.position.copy(moon.position);
                 scene.add(moonGlow);
+            } else if (skyElements === 'sun') {
+                const sunGeometry = new THREE.SphereGeometry(12, 32, 32);
+                const sunMaterial = new THREE.MeshBasicMaterial({
+                    color: 0xFFDD44,
+                    transparent: true,
+                    opacity: 0.9
+                });
+                const sun = new THREE.Mesh(sunGeometry, sunMaterial);
+                sun.position.set(100, 80, -300);
+                scene.add(sun);
+                
+                const sunGlow = new THREE.Mesh(
+                    new THREE.SphereGeometry(15, 32, 32),
+                    new THREE.MeshBasicMaterial({
+                        color: 0xFFAA00,
+                        transparent: true,
+                        opacity: 0.3
+                    })
+                );
+                sunGlow.position.copy(sun.position);
+                scene.add(sunGlow);
             }
         }
 
@@ -1691,17 +1842,40 @@
                     scene.add(lavaParticle);
                     particles.push(lavaParticle);
                 }
+            } else if (gameState.mapType === 'desert') {
+                for (let i = 0; i < 100; i++) {
+                    const sandParticle = new THREE.Mesh(
+                        new THREE.SphereGeometry(0.15, 4, 4),
+                        new THREE.MeshBasicMaterial({
+                            color: 0xF4A460,
+                            transparent: true,
+                            opacity: 0.4
+                        })
+                    );
+                    sandParticle.position.set(
+                        (Math.random() - 0.5) * 60,
+                        Math.random() * 15,
+                        -Math.random() * 400
+                    );
+                    sandParticle.userData.velocity = {
+                        x: 0.1 + Math.random() * 0.2,
+                        y: (Math.random() - 0.5) * 0.1,
+                        z: 0
+                    };
+                    scene.add(sandParticle);
+                    particles.push(sandParticle);
+                }
             }
         }
 
         function createRoad() {
-            const roadColor = gameState.mapType === 'snow' ? 0x2a2a2a : 0x1a1a1a;
+            const roadColor = 0x0a0a0a;
             const road = new THREE.Mesh(
                 new THREE.PlaneGeometry(14, 500), 
                 new THREE.MeshStandardMaterial({ 
                     color: roadColor, 
                     roughness: 0.95,
-                    metalness: 0.1
+                    metalness: 0.05
                 })
             );
             road.rotation.x = -Math.PI / 2;
@@ -1723,12 +1897,13 @@
                 scene.add(line);
             }
             
+            const shoulderColor = 0x1a1a1a;
             const shoulderL = new THREE.Mesh(
                 new THREE.PlaneGeometry(6, 500), 
                 new THREE.MeshStandardMaterial({ 
-                    color: 0x3a3a3a,
+                    color: shoulderColor,
                     roughness: 0.9,
-                    metalness: 0.05
+                    metalness: 0.02
                 })
             );
             shoulderL.rotation.x = -Math.PI / 2;
@@ -1739,9 +1914,9 @@
             const shoulderR = new THREE.Mesh(
                 new THREE.PlaneGeometry(6, 500), 
                 new THREE.MeshStandardMaterial({ 
-                    color: 0x3a3a3a,
+                    color: shoulderColor,
                     roughness: 0.9,
-                    metalness: 0.05
+                    metalness: 0.02
                 })
             );
             shoulderR.rotation.x = -Math.PI / 2;
@@ -1810,12 +1985,13 @@
                 carGroup.add(rearLight);
             });
             
-            const shieldGeometry = new THREE.SphereGeometry(2.5, 32, 32);
+            const shieldGeometry = new THREE.SphereGeometry(2.8, 32, 32);
             const shieldMaterial = new THREE.MeshBasicMaterial({
                 color: 0x3B82F6,
                 transparent: true,
                 opacity: 0,
-                side: THREE.DoubleSide
+                side: THREE.DoubleSide,
+                depthWrite: false
             });
             shieldMesh = new THREE.Mesh(shieldGeometry, shieldMaterial);
             shieldMesh.visible = false;
@@ -1850,6 +2026,44 @@
                 scene.add(postGroup);
                 brightwayPosts.push(postGroup);
             }
+        }
+
+        function createShieldPickup() {
+            const shieldGroup = new THREE.Group();
+            
+            const outerRing = new THREE.Mesh(
+                new THREE.TorusGeometry(1.2, 0.15, 16, 32),
+                new THREE.MeshStandardMaterial({
+                    color: 0x3B82F6,
+                    emissive: 0x3B82F6,
+                    emissiveIntensity: 0.5,
+                    metalness: 0.8,
+                    roughness: 0.2
+                })
+            );
+            outerRing.rotation.x = Math.PI / 2;
+            shieldGroup.add(outerRing);
+            
+            const shieldCore = new THREE.Mesh(
+                new THREE.SphereGeometry(0.6, 16, 16),
+                new THREE.MeshBasicMaterial({
+                    color: 0x60A5FA,
+                    transparent: true,
+                    opacity: 0.6
+                })
+            );
+            shieldGroup.add(shieldCore);
+            
+            shieldGroup.userData.rotation = 0;
+            shieldGroup.userData.bobOffset = Math.random() * Math.PI * 2;
+            
+            const lanes = [-4.5, 0, 4.5];
+            const lane = lanes[Math.floor(Math.random() * lanes.length)];
+            shieldGroup.position.set(lane, 1.5, -200);
+            shieldGroup.userData.type = 'shield';
+            
+            scene.add(shieldGroup);
+            shieldPickups.push(shieldGroup);
         }
 
         function createObstacle() {
@@ -1898,7 +2112,6 @@
                 if (e.key === 'ArrowUp') keys.up = true;
                 if (e.key === 'ArrowDown') keys.down = true;
                 if (e.key === ' ') { e.preventDefault(); keys.space = true; activateBrightWay(); }
-                if (e.key === 's' || e.key === 'S') { e.preventDefault(); keys.s = true; activateShield(); }
             });
             document.addEventListener('keyup', (e) => {
                 if (e.key === 'ArrowLeft') keys.left = false;
@@ -1906,7 +2119,6 @@
                 if (e.key === 'ArrowUp') keys.up = false;
                 if (e.key === 'ArrowDown') keys.down = false;
                 if (e.key === ' ') keys.space = false;
-                if (e.key === 's' || e.key === 'S') keys.s = false;
             });
             const canvas = document.getElementById('gameCanvas');
             canvas.addEventListener('touchstart', (e) => {
@@ -1918,7 +2130,6 @@
             });
             canvas.addEventListener('touchend', () => { keys.left = false; keys.right = false; });
             document.getElementById('brightwayBtn').addEventListener('click', () => activateBrightWay());
-            document.getElementById('shieldBtn').addEventListener('click', () => activateShield());
             document.getElementById('pauseBtn').addEventListener('click', () => {
                 gameState.paused = !gameState.paused;
                 document.getElementById('pauseBtn').innerHTML = gameState.paused ? '▶ Reanudar' : '⏸ Pausar';
@@ -1938,17 +2149,43 @@
                 scene.fog.color.setHex(0xFFE4B5);
                 scene.background.setHex(0x2a2a1a);
             } else if (gameState.mapType === 'snow') {
-                scene.fog.color.setHex(0xFFFAF0);
-                scene.background.setHex(0xE8F4F8);
+                scene.fog.color.setHex(0x8BA3C7);
+                scene.background.setHex(0x5A6B85);
             } else if (gameState.mapType === 'volcano') {
                 scene.fog.color.setHex(0xFF8C00);
                 scene.background.setHex(0x3a1a0a);
+            } else if (gameState.mapType === 'desert') {
+                scene.fog.color.setHex(0xC9A86A);
+                scene.background.setHex(0x8B7355);
             }
             
             scene.children.forEach(child => {
                 if (child instanceof THREE.DirectionalLight) {
-                    child.intensity = 2.5;
-                    child.color.setHex(0xFFFFCC);
+                    if (gameState.mapType === 'snow' || gameState.mapType === 'desert') {
+                        child.intensity = 1.2;
+                        child.color.setHex(0xFFFFDD);
+                    } else {
+                        child.intensity = 2.5;
+                        child.color.setHex(0xFFFFCC);
+                    }
+                } else if (child instanceof THREE.AmbientLight) {
+                    if (gameState.mapType === 'snow') {
+                        child.intensity = 0.65;
+                        child.color.setHex(0xD4E4F7);
+                    } else if (gameState.mapType === 'desert') {
+                        child.intensity = 0.6;
+                        child.color.setHex(0xE5C07B);
+                    }
+                } else if (child instanceof THREE.HemisphereLight) {
+                    if (gameState.mapType === 'snow') {
+                        child.intensity = 0.5;
+                        if (child.groundColor) child.groundColor.setHex(0x7A91B0);
+                        if (child.color) child.color.setHex(0xA8C5E8);
+                    } else if (gameState.mapType === 'desert') {
+                        child.intensity = 0.5;
+                        if (child.groundColor) child.groundColor.setHex(0x9B7E5C);
+                        if (child.color) child.color.setHex(0xC9A86A);
+                    }
                 }
             });
             brightwayPosts.forEach(post => {
@@ -1968,12 +2205,19 @@
                         }
                     });
                 } else if (gameState.mapType === 'snow') {
-                    scene.fog.color.setHex(0xE0F2FE);
-                    scene.background.setHex(0xBAE6FD);
+                    scene.fog.color.setHex(0x0a0a1a);
+                    scene.background.setHex(0x0d1117);
                     scene.children.forEach(child => {
                         if (child instanceof THREE.DirectionalLight) {
-                            child.intensity = 0.8;
-                            child.color.setHex(0xCCE5FF);
+                            child.intensity = 0.4;
+                            child.color.setHex(0x6a6a80);
+                        } else if (child instanceof THREE.AmbientLight) {
+                            child.intensity = 0.3;
+                            child.color.setHex(0x3a3a50);
+                        } else if (child instanceof THREE.HemisphereLight) {
+                            child.intensity = 0.3;
+                            if (child.groundColor) child.groundColor.setHex(0x1a1a2a);
+                            if (child.color) child.color.setHex(0x2a2a3a);
                         }
                     });
                 } else if (gameState.mapType === 'volcano') {
@@ -1983,6 +2227,22 @@
                         if (child instanceof THREE.DirectionalLight) {
                             child.intensity = 0.6;
                             child.color.setHex(0xFF6600);
+                        }
+                    });
+                } else if (gameState.mapType === 'desert') {
+                    scene.fog.color.setHex(0x1a1410);
+                    scene.background.setHex(0x0f0c09);
+                    scene.children.forEach(child => {
+                        if (child instanceof THREE.DirectionalLight) {
+                            child.intensity = 0.4;
+                            child.color.setHex(0x6a5a4a);
+                        } else if (child instanceof THREE.AmbientLight) {
+                            child.intensity = 0.3;
+                            child.color.setHex(0x4a3a2a);
+                        } else if (child instanceof THREE.HemisphereLight) {
+                            child.intensity = 0.3;
+                            if (child.groundColor) child.groundColor.setHex(0x2a1a0a);
+                            if (child.color) child.color.setHex(0x3a2a1a);
                         }
                     });
                 }
@@ -1998,11 +2258,14 @@
             playShieldSound();
             gameState.shieldActive = true;
             gameState.shieldTimeLeft = 10;
-            document.getElementById('shieldBtn').classList.add('active');
+            
+            const shieldIndicator = document.getElementById('shieldIndicator');
+            shieldIndicator.classList.add('active');
+            shieldIndicator.classList.remove('warning');
             
             if (shieldMesh) {
                 shieldMesh.visible = true;
-                shieldMesh.material.opacity = 0.3;
+                shieldMesh.material.opacity = 0.4;
             }
             
             const shieldInterval = setInterval(() => {
@@ -2012,17 +2275,18 @@
                 }
                 
                 gameState.shieldTimeLeft--;
+                document.getElementById('shieldTime').textContent = gameState.shieldTimeLeft;
                 
                 if (gameState.shieldTimeLeft <= 3 && gameState.shieldTimeLeft > 0) {
-                    document.getElementById('shieldBtn').classList.add('blink');
+                    shieldIndicator.classList.add('warning');
                     if (shieldMesh) {
-                        shieldMesh.material.opacity = gameState.shieldTimeLeft % 2 === 0 ? 0.5 : 0.1;
+                        shieldMesh.material.opacity = (gameState.shieldTimeLeft % 2 === 0) ? 0.6 : 0.2;
                     }
                 }
                 
                 if (gameState.shieldTimeLeft <= 0) {
                     gameState.shieldActive = false;
-                    document.getElementById('shieldBtn').classList.remove('active', 'blink');
+                    shieldIndicator.classList.remove('active', 'warning');
                     if (shieldMesh) {
                         shieldMesh.visible = false;
                         shieldMesh.material.opacity = 0;
@@ -2030,6 +2294,14 @@
                     clearInterval(shieldInterval);
                 }
             }, 1000);
+        }
+
+        function showComboIndicator() {
+            const comboEl = document.getElementById('comboIndicator');
+            comboEl.textContent = `COMBO x${gameState.combo}!`;
+            comboEl.classList.remove('show');
+            void comboEl.offsetWidth;
+            comboEl.classList.add('show');
         }
 
         function updateGame() {
@@ -2056,6 +2328,10 @@
                 }
             }
             
+            if (gameState.frameCount % 180 === 0 && Math.random() > 0.3) {
+                createShieldPickup();
+            }
+            
             obstacles.forEach((obstacle, index) => {
                 obstacle.position.z += gameState.speed * 0.05;
                 if (obstacle.userData.wheels) {
@@ -2078,6 +2354,39 @@
                     } else {
                         endGame();
                     }
+                }
+            });
+            
+            shieldPickups.forEach((pickup, index) => {
+                pickup.position.z += gameState.speed * 0.05;
+                
+                pickup.userData.rotation += 0.02;
+                pickup.rotation.y = pickup.userData.rotation;
+                pickup.position.y = 1.5 + Math.sin(Date.now() * 0.003 + pickup.userData.bobOffset) * 0.3;
+                
+                if (pickup.position.z > 20) {
+                    scene.remove(pickup);
+                    shieldPickups.splice(index, 1);
+                }
+                
+                if (Math.abs(pickup.position.z - car.position.z) < 2 && Math.abs(pickup.position.x - car.position.x) < 2) {
+                    scene.remove(pickup);
+                    shieldPickups.splice(index, 1);
+                    
+                    const currentTime = Date.now();
+                    if (currentTime - gameState.lastPickupTime < 3000) {
+                        gameState.combo++;
+                        if (gameState.combo >= 2) {
+                            gameState.score += 500 * gameState.combo;
+                            playComboSound();
+                            showComboIndicator();
+                        }
+                    } else {
+                        gameState.combo = 1;
+                    }
+                    gameState.lastPickupTime = currentTime;
+                    
+                    activateShield();
                 }
             });
             
@@ -2110,6 +2419,18 @@
                         };
                         particle.userData.life = 0;
                     }
+                } else if (gameState.mapType === 'desert') {
+                    particle.position.x += particle.userData.velocity.x;
+                    particle.position.y += particle.userData.velocity.y;
+                    particle.position.z += gameState.speed * 0.02;
+                    
+                    if (particle.position.x > 30 || particle.position.z > 30) {
+                        particle.position.set(
+                            (Math.random() - 0.5) * 60,
+                            Math.random() * 15,
+                            -Math.random() * 400
+                        );
+                    }
                 }
             });
             
@@ -2130,9 +2451,9 @@
             }
             
             if (shieldMesh && gameState.shieldActive) {
-                shieldMesh.rotation.y += 0.02;
+                shieldMesh.rotation.y += 0.03;
                 if (gameState.shieldTimeLeft > 3) {
-                    shieldMesh.material.opacity = 0.3 + Math.sin(Date.now() * 0.005) * 0.1;
+                    shieldMesh.material.opacity = 0.4 + Math.sin(Date.now() * 0.005) * 0.15;
                 }
             }
             
@@ -2170,6 +2491,8 @@
             document.getElementById('gameOverScreen').classList.remove('show');
             obstacles.forEach(obstacle => scene.remove(obstacle));
             obstacles = [];
+            shieldPickups.forEach(pickup => scene.remove(pickup));
+            shieldPickups = [];
             gameState.score = 0;
             gameState.speed = 40;
             gameState.carPosition = 0;
@@ -2178,8 +2501,10 @@
             gameState.shieldActive = false;
             gameState.shieldTimeLeft = 0;
             gameState.obstacleFrequency = 120;
+            gameState.combo = 0;
+            gameState.lastPickupTime = 0;
             document.getElementById('brightwayBtn').classList.remove('active');
-            document.getElementById('shieldBtn').classList.remove('active', 'blink');
+            document.getElementById('shieldIndicator').classList.remove('active', 'warning');
             if (shieldMesh) {
                 shieldMesh.visible = false;
                 shieldMesh.material.opacity = 0;
@@ -2191,11 +2516,14 @@
                 scene.fog.color.setHex(0x0a0a1a);
                 scene.background.setHex(0x050510);
             } else if (gameState.mapType === 'snow') {
-                scene.fog.color.setHex(0xE0F2FE);
-                scene.background.setHex(0xBAE6FD);
+                scene.fog.color.setHex(0x0a0a1a);
+                scene.background.setHex(0x0d1117);
             } else if (gameState.mapType === 'volcano') {
                 scene.fog.color.setHex(0x450a0a);
                 scene.background.setHex(0x1a0505);
+            } else if (gameState.mapType === 'desert') {
+                scene.fog.color.setHex(0x1a1410);
+                scene.background.setHex(0x0f0c09);
             }
             
             brightwayPosts.forEach(post => {
@@ -2210,6 +2538,8 @@
             gameState.running = false;
             obstacles.forEach(obstacle => scene.remove(obstacle));
             obstacles = [];
+            shieldPickups.forEach(pickup => scene.remove(pickup));
+            shieldPickups = [];
             brightwayPosts.forEach(post => scene.remove(post));
             brightwayPosts = [];
             particles.forEach(particle => scene.remove(particle));
@@ -2230,11 +2560,13 @@
             document.getElementById('carSelectorScreen').classList.add('hidden');
             document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
             document.getElementById('brightwayBtn').classList.remove('active');
-            document.getElementById('shieldBtn').classList.remove('active', 'blink');
+            document.getElementById('shieldIndicator').classList.remove('active', 'warning');
             gameState.carColor = null;
             gameState.mapType = null;
             gameState.shieldActive = false;
             gameState.shieldTimeLeft = 0;
+            gameState.combo = 0;
+            gameState.lastPickupTime = 0;
         }
 
         window.addEventListener('resize', () => {
