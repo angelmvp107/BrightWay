@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -488,6 +489,10 @@
             width: 100%;
             height: 100%;
             display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
         }
 
         .game-hud {
@@ -573,10 +578,15 @@
             position: absolute;
             bottom: 15px;
             left: 15px;
-            display: flex;
+            display: none;
             flex-direction: column;
             gap: 0.75rem;
-            z-index: 10;
+            z-index: 200;
+            pointer-events: auto;
+        }
+        
+        .game-controls.show {
+            display: flex;
         }
 
         .btn {
@@ -592,11 +602,19 @@
             min-width: 160px;
             text-align: center;
             box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+            pointer-events: auto;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .btn:hover:not(:disabled) {
             transform: translateX(5px);
             box-shadow: 0 6px 25px rgba(255, 107, 53, 0.5);
+        }
+        
+        .btn:active:not(:disabled) {
+            transform: translateX(3px) scale(0.98);
         }
 
         .btn:disabled {
@@ -843,7 +861,9 @@
             padding: 2rem;
             margin-top: 2rem;
             text-align: left;
-            max-width: 700px;
+            max-width: 100%;
+            max-height: 100%;
+            overflow-y: auto;
             margin-left: auto;
             margin-right: auto;
         }
@@ -1130,16 +1150,16 @@
 
             <div class="combo-indicator" id="comboIndicator">COMBO x2!</div>
             
-            <div class="game-controls">
+            <div class="game-controls" id="gameControls">
                 <button class="btn btn-brightway" id="brightwayBtn">💡 BrightWay</button>
-                <button class="btn btn-exit" id="menuBtn">🚪 Salir</button>
                 <button class="btn" id="pauseBtn">⏸ Pausar</button>
+                <button class="btn btn-exit" id="menuBtn">🚪 Salir</button>
             </div>
             
             <div class="game-over-screen" id="gameOverScreen">
                 <h2>¡Juego Terminado!</h2>
                 <div class="final-score">Puntuación: <span id="finalScore">0</span></div>
-                <button class="btn" id="restartBtn" style="font-size: 1.1rem; padding: 1rem 2.5rem;">🔄 Jugar de Nuevo</button>
+                <button class="btn" id="exitGameBtn" style="font-size: 1.1rem; padding: 1rem 2.5rem; background: linear-gradient(135deg, var(--danger), #DC2626);">🚪 Salir al Menú</button>
             </div>
         </div>
     </div>
@@ -1150,18 +1170,20 @@
                 <h4>Controles del Juego</h4>
                 <p><strong>Teclado PC:</strong></p>
                 <p>• <strong>← →</strong> - Mover el auto izquierda/derecha</p>
-                <p>• <strong>↑ ↓</strong> - Acelerar/Frenar</p>
-                <p>• <strong>ESPACIO</strong> - Activar BrightWay (iluminación especial)</p>
+                <p>• <strong>W</strong> - Saltar sobre obstáculos</p>
+                <p>• <strong>ESPACIO</strong> - Activar/Desactivar BrightWay (iluminación especial)</p>
                 
                 <h4 style="margin-top: 1.5rem;">Móvil/Táctil:</h4>
                 <p>• Tocar izquierda/derecha de la pantalla para girar</p>
-                <p>• Botón 💡 BrightWay para activar iluminación</p>
+                <p>• Doble toque en la pantalla para saltar</p>
+                <p>• Botón 💡 BrightWay para activar/desactivar iluminación</p>
                 <p>• El auto acelera automáticamente</p>
                 
                 <h4 style="margin-top: 1.5rem;">Poderes y Objetos:</h4>
                 <p>• <strong>🛡️ Escudo (Recolectable):</strong> Aparece en la carretera. Recógelo para obtener protección de 10 segundos. El campo parpadea cuando está por acabarse.</p>
-                <p>• <strong>💡 BrightWay:</strong> Ilumina el camino y otorga puntos extra por 5 segundos.</p>
+                <p>• <strong>💡 BrightWay:</strong> Ilumina el camino y otorga puntos extra. Se puede activar/desactivar en cualquier momento.</p>
                 <p>• <strong>⭐ Combo:</strong> Recolecta escudos consecutivamente para multiplicar tus puntos.</p>
+                <p>• <strong>🦘 Salto:</strong> Salta sobre los obstáculos para obtener 500 puntos extra.</p>
                 
                 <h4 style="margin-top: 1.5rem;">Características Nuevas:</h4>
                 <p>• <strong>Mapa Desierto:</strong> Nuevo escenario con dunas y tormentas de arena</p>
@@ -1199,13 +1221,35 @@
             {f:392,d:0.36},{f:329.63,d:0.36},{f:440,d:0.36},{f:493.88,d:0.32},
             {f:466.16,d:0.28},{f:440,d:0.32},{f:392,d:0.24},{f:659.25,d:0.24},
             {f:783.99,d:0.24},{f:880,d:0.28},{f:698.46,d:0.24},{f:783.99,d:0.24},
-            {f:659.25,d:0.32},{f:523.25,d:0.24},{f:587.33,d:0.24},{f:493.88,d:0.32}
+            {f:659.25,d:0.32},{f:523.25,d:0.24},{f:587.33,d:0.24},{f:493.88,d:0.32},
+            {f:523.25,d:0.36},{f:392,d:0.36},{f:329.63,d:0.36},{f:440,d:0.36},
+            {f:493.88,d:0.32},{f:466.16,d:0.28},{f:440,d:0.32},{f:392,d:0.24},
+            {f:659.25,d:0.24},{f:783.99,d:0.24},{f:880,d:0.28},{f:698.46,d:0.24},
+            {f:783.99,d:0.24},{f:659.25,d:0.32},{f:523.25,d:0.24},{f:587.33,d:0.24},
+            {f:493.88,d:0.32},{f:783.99,d:0.24},{f:740,d:0.24},{f:698.46,d:0.24},
+            {f:622.25,d:0.32},{f:659.25,d:0.24},{f:415.3,d:0.18},{f:440,d:0.18},
+            {f:523.25,d:0.32},{f:440,d:0.24},{f:523.25,d:0.24},{f:587.33,d:0.48},
+            {f:783.99,d:0.24},{f:740,d:0.24},{f:698.46,d:0.24},{f:622.25,d:0.32},
+            {f:659.25,d:0.24},{f:1046.5,d:0.18},{f:1046.5,d:0.18},{f:1046.5,d:0.32},
+            {f:783.99,d:0.48},{f:783.99,d:0.24},{f:740,d:0.24},{f:698.46,d:0.24},
+            {f:622.25,d:0.32},{f:659.25,d:0.24},{f:415.3,d:0.18},{f:440,d:0.18},
+            {f:523.25,d:0.32},{f:440,d:0.24},{f:523.25,d:0.24},{f:587.33,d:0.48}
         ];
 
         const megaloNotes = [
             {f:293.66,d:0.15},{f:293.66,d:0.15},{f:587.33,d:0.3},{f:440,d:0.3},
             {f:415.3,d:0.25},{f:392,d:0.25},{f:349.23,d:0.25},{f:293.66,d:0.15},
             {f:349.23,d:0.15},{f:392,d:0.15},{f:261.63,d:0.15},{f:261.63,d:0.15},
+            {f:587.33,d:0.3},{f:440,d:0.3},{f:415.3,d:0.25},{f:392,d:0.25},
+            {f:349.23,d:0.25},{f:293.66,d:0.15},{f:349.23,d:0.15},{f:392,d:0.15},
+            {f:246.94,d:0.15},{f:246.94,d:0.15},{f:587.33,d:0.3},{f:440,d:0.3},
+            {f:415.3,d:0.25},{f:392,d:0.25},{f:349.23,d:0.25},{f:293.66,d:0.15},
+            {f:349.23,d:0.15},{f:392,d:0.15},{f:220,d:0.15},{f:220,d:0.15},
+            {f:587.33,d:0.3},{f:440,d:0.3},{f:415.3,d:0.25},{f:392,d:0.25},
+            {f:349.23,d:0.25},{f:293.66,d:0.15},{f:349.23,d:0.15},{f:392,d:0.15},
+            {f:207.65,d:0.15},{f:207.65,d:0.15},{f:587.33,d:0.3},{f:440,d:0.3},
+            {f:415.3,d:0.25},{f:392,d:0.25},{f:349.23,d:0.25},{f:293.66,d:0.15},
+            {f:349.23,d:0.15},{f:392,d:0.15},{f:293.66,d:0.15},{f:293.66,d:0.15},
             {f:587.33,d:0.3},{f:440,d:0.3},{f:415.3,d:0.25},{f:392,d:0.25},
             {f:349.23,d:0.25},{f:293.66,d:0.15},{f:349.23,d:0.15},{f:392,d:0.15}
         ];
@@ -1214,26 +1258,70 @@
             {f:392,d:0.3},{f:392,d:0.3},{f:392,d:0.3},{f:523.25,d:0.5},
             {f:783.99,d:0.5},{f:698.46,d:0.25},{f:659.25,d:0.25},{f:587.33,d:0.25},
             {f:1046.5,d:0.5},{f:783.99,d:0.4},{f:698.46,d:0.25},{f:659.25,d:0.25},
-            {f:587.33,d:0.25},{f:1046.5,d:0.5},{f:783.99,d:0.4}
+            {f:587.33,d:0.25},{f:1046.5,d:0.5},{f:783.99,d:0.4},{f:698.46,d:0.25},
+            {f:659.25,d:0.25},{f:698.46,d:0.25},{f:587.33,d:0.6},
+            {f:392,d:0.3},{f:392,d:0.3},{f:392,d:0.3},{f:523.25,d:0.5},
+            {f:783.99,d:0.5},{f:698.46,d:0.25},{f:659.25,d:0.25},{f:587.33,d:0.25},
+            {f:1046.5,d:0.5},{f:783.99,d:0.4},{f:698.46,d:0.25},{f:659.25,d:0.25},
+            {f:587.33,d:0.25},{f:1046.5,d:0.5},{f:783.99,d:0.4},{f:698.46,d:0.25},
+            {f:659.25,d:0.25},{f:698.46,d:0.25},{f:587.33,d:0.6},
+            {f:783.99,d:0.3},{f:783.99,d:0.3},{f:783.99,d:0.3},{f:880,d:0.5},
+            {f:1046.5,d:0.5},{f:987.77,d:0.25},{f:880,d:0.25},{f:783.99,d:0.25},
+            {f:1174.7,d:0.5},{f:1046.5,d:0.4},{f:987.77,d:0.25},{f:880,d:0.25},
+            {f:783.99,d:0.25},{f:1174.7,d:0.5},{f:1046.5,d:0.4}
         ];
 
         const tetrisNotes = [
             {f:659.25,d:0.4},{f:493.88,d:0.2},{f:523.25,d:0.2},{f:587.33,d:0.4},
             {f:523.25,d:0.2},{f:493.88,d:0.2},{f:440,d:0.4},{f:440,d:0.2},
             {f:523.25,d:0.2},{f:659.25,d:0.4},{f:587.33,d:0.2},{f:523.25,d:0.2},
-            {f:493.88,d:0.6},{f:523.25,d:0.2},{f:587.33,d:0.4}
+            {f:493.88,d:0.6},{f:523.25,d:0.2},{f:587.33,d:0.4},{f:659.25,d:0.4},
+            {f:523.25,d:0.4},{f:440,d:0.4},{f:440,d:0.4},{f:0,d:0.2},
+            {f:587.33,d:0.4},{f:698.46,d:0.2},{f:880,d:0.4},{f:783.99,d:0.2},
+            {f:698.46,d:0.2},{f:659.25,d:0.6},{f:523.25,d:0.2},{f:659.25,d:0.4},
+            {f:587.33,d:0.2},{f:523.25,d:0.2},{f:493.88,d:0.4},{f:493.88,d:0.2},
+            {f:523.25,d:0.2},{f:587.33,d:0.4},{f:659.25,d:0.4},{f:523.25,d:0.4},
+            {f:440,d:0.4},{f:440,d:0.4},{f:0,d:0.4},{f:659.25,d:0.4},
+            {f:493.88,d:0.2},{f:523.25,d:0.2},{f:587.33,d:0.4},{f:523.25,d:0.2},
+            {f:493.88,d:0.2},{f:440,d:0.4},{f:440,d:0.2},{f:523.25,d:0.2},
+            {f:659.25,d:0.4},{f:587.33,d:0.2},{f:523.25,d:0.2},{f:493.88,d:0.6},
+            {f:523.25,d:0.2},{f:587.33,d:0.4},{f:659.25,d:0.4},{f:523.25,d:0.4},
+            {f:440,d:0.4},{f:440,d:0.6}
         ];
 
         const piratesNotes = [
             {f:220,d:0.2},{f:261.63,d:0.2},{f:293.66,d:0.15},{f:293.66,d:0.15},
             {f:293.66,d:0.2},{f:329.63,d:0.2},{f:349.23,d:0.15},{f:349.23,d:0.15},
-            {f:349.23,d:0.2},{f:392,d:0.2},{f:220,d:0.2},{f:261.63,d:0.2}
+            {f:349.23,d:0.2},{f:392,d:0.2},{f:220,d:0.2},{f:261.63,d:0.2},
+            {f:293.66,d:0.15},{f:293.66,d:0.15},{f:293.66,d:0.2},{f:329.63,d:0.2},
+            {f:293.66,d:0.4},{f:261.63,d:0.3},{f:220,d:0.2},{f:261.63,d:0.2},
+            {f:293.66,d:0.15},{f:293.66,d:0.15},{f:293.66,d:0.2},{f:329.63,d:0.2},
+            {f:349.23,d:0.15},{f:349.23,d:0.15},{f:349.23,d:0.2},{f:392,d:0.2},
+            {f:220,d:0.2},{f:261.63,d:0.2},{f:293.66,d:0.15},{f:293.66,d:0.15},
+            {f:329.63,d:0.4},{f:293.66,d:0.4},{f:220,d:0.2},{f:261.63,d:0.2},
+            {f:293.66,d:0.15},{f:293.66,d:0.15},{f:293.66,d:0.2},{f:329.63,d:0.2},
+            {f:349.23,d:0.15},{f:349.23,d:0.15},{f:349.23,d:0.2},{f:392,d:0.2},
+            {f:220,d:0.2},{f:261.63,d:0.2},{f:293.66,d:0.15},{f:293.66,d:0.15},
+            {f:293.66,d:0.2},{f:329.63,d:0.2},{f:293.66,d:0.4},{f:261.63,d:0.3},
+            {f:392,d:0.3},{f:440,d:0.3},{f:466.16,d:0.3},{f:440,d:0.3},
+            {f:392,d:0.3},{f:349.23,d:0.3},{f:329.63,d:0.6}
         ];
 
         const pokemonNotes = [
             {f:440,d:0.3},{f:440,d:0.2},{f:440,d:0.3},{f:440,d:0.3},{f:392,d:0.2},
             {f:329.63,d:0.2},{f:261.63,d:0.35},{f:261.63,d:0.3},{f:440,d:0.2},
-            {f:440,d:0.3},{f:392,d:0.2},{f:349.23,d:0.2},{f:392,d:0.35}
+            {f:440,d:0.3},{f:392,d:0.2},{f:349.23,d:0.2},{f:392,d:0.35},
+            {f:349.23,d:0.3},{f:466.16,d:0.3},{f:466.16,d:0.3},{f:466.16,d:0.3},
+            {f:440,d:0.2},{f:392,d:0.2},{f:349.23,d:0.35},{f:349.23,d:0.3},
+            {f:440,d:0.2},{f:440,d:0.3},{f:392,d:0.2},{f:349.23,d:0.2},{f:440,d:0.35},
+            {f:440,d:0.2},{f:523.25,d:0.2},{f:587.33,d:0.4},{f:440,d:0.2},
+            {f:440,d:0.3},{f:523.25,d:0.3},{f:587.33,d:0.3},{f:587.33,d:0.2},
+            {f:523.25,d:0.35},{f:523.25,d:0.3},{f:523.25,d:0.3},{f:587.33,d:0.3},
+            {f:587.33,d:0.2},{f:523.25,d:0.35},{f:523.25,d:0.3},{f:587.33,d:0.3},
+            {f:659.25,d:0.3},{f:698.46,d:0.3},{f:659.25,d:0.2},{f:587.33,d:0.2},
+            {f:523.25,d:0.4},{f:440,d:0.2},{f:523.25,d:0.2},{f:587.33,d:0.4},
+            {f:440,d:0.2},{f:440,d:0.3},{f:523.25,d:0.3},{f:587.33,d:0.3},
+            {f:587.33,d:0.2},{f:523.25,d:0.35}
         ];
 
         const musicLibrary = {mario: marioNotes, megalo: megaloNotes, starWars: starWarsNotes, tetris: tetrisNotes, pirates: piratesNotes, pokemon: pokemonNotes};
@@ -1391,14 +1479,16 @@
 
         let scene, camera, renderer, car, obstacles = [], brightwayPosts = [], particles = [], shieldMesh = null, shieldPickups = [];
         let gameState = {
-            running: false, paused: false, score: 0, highScore: 0, speed: 0, maxSpeed: 70, 
+            running: false, paused: false, score: 0, highScore: 0, speed: 60, maxSpeed: 60, 
             acceleration: 0.5, carPosition: 0, carColor: null, mapType: null,
             brightwayActive: false, shieldActive: false, shieldTimeLeft: 0,
             frameCount: 0, isMobile: window.innerWidth <= 768, obstacleFrequency: 120,
-            combo: 0, lastPickupTime: 0
+            combo: 0, lastPickupTime: 0,
+            isJumping: false, jumpHeight: 0, jumpVelocity: 0
         };
         const keys = {left: false, right: false, up: false, down: false, space: false};
         const carColorMap = {blue: 0x3B82F6, red: 0xEF4444, yellow: 0xFBBF24, green: 0x059669};
+        let lastTapTime = 0, lastTapX = 0;
 
         document.addEventListener('DOMContentLoaded', function() {
             document.addEventListener('click', function(e) {
@@ -1579,11 +1669,26 @@
             createCar();
             createBrightwayPosts();
             createParticles();
-            setupControls();
+            
+            // Configurar controles solo la primera vez
+            if (!controlsSetup) {
+                setupControls();
+            }
+            
+            // Inicializar valores del juego
             gameState.running = true;
-            gameState.speed = 40;
+            gameState.speed = 60; // VELOCIDAD FIJA
+            gameState.maxSpeed = 60;
             gameState.highScore = parseInt(localStorage.getItem('brightwayHighScore3D') || '0');
+            
+            // Mostrar controles del juego
+            document.getElementById('gameControls').classList.add('show');
+            
+            // Actualizar UI inicial
             document.getElementById('highScore').textContent = gameState.highScore;
+            document.getElementById('speedValue').textContent = '60';
+            document.getElementById('score').textContent = '0';
+            
             animate();
         }
 
@@ -2105,13 +2210,20 @@
             obstacles.push(carGroup);
         }
 
+        let controlsSetup = false;
+        
         function setupControls() {
+            if (controlsSetup) return;
+            
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'ArrowLeft') keys.left = true;
                 if (e.key === 'ArrowRight') keys.right = true;
                 if (e.key === 'ArrowUp') keys.up = true;
                 if (e.key === 'ArrowDown') keys.down = true;
-                if (e.key === ' ') { e.preventDefault(); keys.space = true; activateBrightWay(); }
+                if (e.key === ' ') { e.preventDefault(); keys.space = true; toggleBrightWay(); }
+                if ((e.key === 'w' || e.key === 'W') && gameState.running && !gameState.paused && !gameState.isJumping) {
+                    jump();
+                }
             });
             document.addEventListener('keyup', (e) => {
                 if (e.key === 'ArrowLeft') keys.left = false;
@@ -2120,137 +2232,244 @@
                 if (e.key === 'ArrowDown') keys.down = false;
                 if (e.key === ' ') keys.space = false;
             });
+            
             const canvas = document.getElementById('gameCanvas');
             canvas.addEventListener('touchstart', (e) => {
                 const touch = e.touches[0];
                 const rect = canvas.getBoundingClientRect();
                 const x = touch.clientX - rect.left;
-                if (x < rect.width / 2) keys.left = true;
-                else keys.right = true;
+                const currentTime = new Date().getTime();
+                const tapLength = currentTime - lastTapTime;
+                
+                if (tapLength < 300 && tapLength > 0 && Math.abs(x - lastTapX) < 50) {
+                    if (gameState.running && !gameState.paused && !gameState.isJumping) {
+                        jump();
+                    }
+                    lastTapTime = 0;
+                } else {
+                    if (x < rect.width / 2) keys.left = true;
+                    else keys.right = true;
+                    lastTapTime = currentTime;
+                    lastTapX = x;
+                }
             });
             canvas.addEventListener('touchend', () => { keys.left = false; keys.right = false; });
-            document.getElementById('brightwayBtn').addEventListener('click', () => activateBrightWay());
-            document.getElementById('pauseBtn').addEventListener('click', () => {
+            
+            // Botones del juego con prevención de propagación
+            const brightwayBtn = document.getElementById('brightwayBtn');
+            const pauseBtn = document.getElementById('pauseBtn');
+            const menuBtn = document.getElementById('menuBtn');
+            const exitGameBtn = document.getElementById('exitGameBtn');
+            
+            brightwayBtn.onclick = function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                toggleBrightWay();
+            };
+            
+            pauseBtn.onclick = function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                if (!gameState.running) return;
                 gameState.paused = !gameState.paused;
-                document.getElementById('pauseBtn').innerHTML = gameState.paused ? '▶ Reanudar' : '⏸ Pausar';
+                this.innerHTML = gameState.paused ? '▶ Reanudar' : '⏸ Pausar';
+            };
+            
+            menuBtn.onclick = function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                returnToMenu();
+            };
+            
+            exitGameBtn.onclick = function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                returnToMenu();
+            };
+            
+            controlsSetup = true;
+        }
+
+        function toggleBrightWay() {
+            if (!gameState.running || gameState.paused) {
+                console.log('No se puede activar BrightWay: juego no activo o pausado');
+                return;
+            }
+            
+            playClick();
+            
+            if (gameState.brightwayActive) {
+                gameState.brightwayActive = false;
+                deactivateBrightWay();
+                console.log('BrightWay desactivado');
+            } else {
+                gameState.brightwayActive = true;
+                activateBrightWay();
+                console.log('BrightWay activado');
+            }
+        }
+
+        // Configuración de iluminación para cada mapa
+        const mapLightingConfig = {
+            city: {
+                normal: {
+                    fog: 0x0a0a1a,
+                    background: 0x050510,
+                    directional: { intensity: 0.5, color: 0x9090ff },
+                    ambient: { intensity: 0.4, color: 0x4a4a60 },
+                    hemisphere: { intensity: 0.4 }
+                },
+                brightway: {
+                    fog: 0xFFE4B5,
+                    background: 0x2a2a1a,
+                    directional: { intensity: 2.5, color: 0xFFFFCC },
+                    ambient: { intensity: 0.8 },
+                    hemisphere: { intensity: 0.7 }
+                }
+            },
+            snow: {
+                normal: {
+                    fog: 0x0a0a1a,
+                    background: 0x0d1117,
+                    directional: { intensity: 0.4, color: 0x6a6a80 },
+                    ambient: { intensity: 0.3, color: 0x3a3a50 },
+                    hemisphere: { intensity: 0.3, groundColor: 0x1a1a2a, skyColor: 0x2a2a3a }
+                },
+                brightway: {
+                    fog: 0x8BA3C7,
+                    background: 0x5A6B85,
+                    directional: { intensity: 1.2, color: 0xFFFFDD },
+                    ambient: { intensity: 0.65, color: 0xD4E4F7 },
+                    hemisphere: { intensity: 0.5, groundColor: 0x7A91B0, skyColor: 0xA8C5E8 }
+                }
+            },
+            volcano: {
+                normal: {
+                    fog: 0x450a0a,
+                    background: 0x1a0505,
+                    directional: { intensity: 0.6, color: 0xFF6600 },
+                    ambient: { intensity: 0.3, color: 0xFF4400 },
+                    hemisphere: { intensity: 0.4 }
+                },
+                brightway: {
+                    fog: 0xFF8C00,
+                    background: 0x3a1a0a,
+                    directional: { intensity: 2.5, color: 0xFFFFCC },
+                    ambient: { intensity: 0.7 },
+                    hemisphere: { intensity: 0.7 }
+                }
+            },
+            desert: {
+                normal: {
+                    fog: 0x1a1410,
+                    background: 0x0f0c09,
+                    directional: { intensity: 0.4, color: 0x6a5a4a },
+                    ambient: { intensity: 0.3, color: 0x4a3a2a },
+                    hemisphere: { intensity: 0.3, groundColor: 0x2a1a0a, skyColor: 0x3a2a1a }
+                },
+                brightway: {
+                    fog: 0xC9A86A,
+                    background: 0x8B7355,
+                    directional: { intensity: 1.2, color: 0xFFFFDD },
+                    ambient: { intensity: 0.6, color: 0xE5C07B },
+                    hemisphere: { intensity: 0.5, groundColor: 0x9B7E5C, skyColor: 0xC9A86A }
+                }
+            }
+        };
+
+        function applyLighting(mode) {
+            const config = mapLightingConfig[gameState.mapType];
+            if (!config) {
+                console.error('No hay configuración para el mapa:', gameState.mapType);
+                return;
+            }
+            
+            const lighting = config[mode];
+            if (!lighting) {
+                console.error('No hay configuración de iluminación para modo:', mode);
+                return;
+            }
+            
+            console.log(`Aplicando iluminación ${mode} para mapa ${gameState.mapType}`);
+            
+            // Aplicar niebla y fondo
+            if (scene.fog) scene.fog.color.setHex(lighting.fog);
+            if (scene.background) scene.background.setHex(lighting.background);
+            
+            // Aplicar a todas las luces de la escena
+            scene.children.forEach(child => {
+                if (child instanceof THREE.DirectionalLight) {
+                    child.intensity = lighting.directional.intensity;
+                    if (lighting.directional.color) child.color.setHex(lighting.directional.color);
+                    console.log('DirectionalLight actualizada:', child.intensity);
+                } else if (child instanceof THREE.AmbientLight) {
+                    child.intensity = lighting.ambient.intensity;
+                    if (lighting.ambient.color) child.color.setHex(lighting.ambient.color);
+                    console.log('AmbientLight actualizada:', child.intensity);
+                } else if (child instanceof THREE.HemisphereLight) {
+                    child.intensity = lighting.hemisphere.intensity;
+                    if (lighting.hemisphere.groundColor) child.groundColor.setHex(lighting.hemisphere.groundColor);
+                    if (lighting.hemisphere.skyColor) child.color.setHex(lighting.hemisphere.skyColor);
+                    console.log('HemisphereLight actualizada:', child.intensity);
+                }
             });
-            document.getElementById('menuBtn').addEventListener('click', () => returnToMenu());
-            document.getElementById('restartBtn').addEventListener('click', () => restartGame());
+            
+            // Aplicar a LEDs de postes
+            const ledIntensity = mode === 'brightway' ? 3 : 0.3;
+            brightwayPosts.forEach(post => {
+                if (post.userData.leds) {
+                    post.userData.leds.forEach(led => {
+                        led.material.emissiveIntensity = ledIntensity;
+                    });
+                }
+            });
+            
+            console.log(`Iluminación ${mode} aplicada correctamente`);
         }
 
         function activateBrightWay() {
-            if (gameState.brightwayActive || !gameState.running) return;
+            if (!gameState.running || gameState.paused) return;
+            
             playBrightWaySound();
-            gameState.brightwayActive = true;
             gameState.score += 1000;
-            document.getElementById('brightwayBtn').classList.add('active');
             
-            if (gameState.mapType === 'city') {
-                scene.fog.color.setHex(0xFFE4B5);
-                scene.background.setHex(0x2a2a1a);
-            } else if (gameState.mapType === 'snow') {
-                scene.fog.color.setHex(0x8BA3C7);
-                scene.background.setHex(0x5A6B85);
-            } else if (gameState.mapType === 'volcano') {
-                scene.fog.color.setHex(0xFF8C00);
-                scene.background.setHex(0x3a1a0a);
-            } else if (gameState.mapType === 'desert') {
-                scene.fog.color.setHex(0xC9A86A);
-                scene.background.setHex(0x8B7355);
-            }
+            const btn = document.getElementById('brightwayBtn');
+            btn.classList.add('active');
             
-            scene.children.forEach(child => {
-                if (child instanceof THREE.DirectionalLight) {
-                    if (gameState.mapType === 'snow' || gameState.mapType === 'desert') {
-                        child.intensity = 1.2;
-                        child.color.setHex(0xFFFFDD);
-                    } else {
-                        child.intensity = 2.5;
-                        child.color.setHex(0xFFFFCC);
-                    }
-                } else if (child instanceof THREE.AmbientLight) {
-                    if (gameState.mapType === 'snow') {
-                        child.intensity = 0.65;
-                        child.color.setHex(0xD4E4F7);
-                    } else if (gameState.mapType === 'desert') {
-                        child.intensity = 0.6;
-                        child.color.setHex(0xE5C07B);
-                    }
-                } else if (child instanceof THREE.HemisphereLight) {
-                    if (gameState.mapType === 'snow') {
-                        child.intensity = 0.5;
-                        if (child.groundColor) child.groundColor.setHex(0x7A91B0);
-                        if (child.color) child.color.setHex(0xA8C5E8);
-                    } else if (gameState.mapType === 'desert') {
-                        child.intensity = 0.5;
-                        if (child.groundColor) child.groundColor.setHex(0x9B7E5C);
-                        if (child.color) child.color.setHex(0xC9A86A);
-                    }
-                }
-            });
-            brightwayPosts.forEach(post => {
-                post.userData.leds.forEach(led => { led.material.emissiveIntensity = 3; });
-            });
-            setTimeout(() => {
-                gameState.brightwayActive = false;
-                document.getElementById('brightwayBtn').classList.remove('active');
-                
-                if (gameState.mapType === 'city') {
-                    scene.fog.color.setHex(0x0a0a1a);
-                    scene.background.setHex(0x050510);
-                    scene.children.forEach(child => {
-                        if (child instanceof THREE.DirectionalLight) {
-                            child.intensity = 0.5;
-                            child.color.setHex(0x9090ff);
-                        }
-                    });
-                } else if (gameState.mapType === 'snow') {
-                    scene.fog.color.setHex(0x0a0a1a);
-                    scene.background.setHex(0x0d1117);
-                    scene.children.forEach(child => {
-                        if (child instanceof THREE.DirectionalLight) {
-                            child.intensity = 0.4;
-                            child.color.setHex(0x6a6a80);
-                        } else if (child instanceof THREE.AmbientLight) {
-                            child.intensity = 0.3;
-                            child.color.setHex(0x3a3a50);
-                        } else if (child instanceof THREE.HemisphereLight) {
-                            child.intensity = 0.3;
-                            if (child.groundColor) child.groundColor.setHex(0x1a1a2a);
-                            if (child.color) child.color.setHex(0x2a2a3a);
-                        }
-                    });
-                } else if (gameState.mapType === 'volcano') {
-                    scene.fog.color.setHex(0x450a0a);
-                    scene.background.setHex(0x1a0505);
-                    scene.children.forEach(child => {
-                        if (child instanceof THREE.DirectionalLight) {
-                            child.intensity = 0.6;
-                            child.color.setHex(0xFF6600);
-                        }
-                    });
-                } else if (gameState.mapType === 'desert') {
-                    scene.fog.color.setHex(0x1a1410);
-                    scene.background.setHex(0x0f0c09);
-                    scene.children.forEach(child => {
-                        if (child instanceof THREE.DirectionalLight) {
-                            child.intensity = 0.4;
-                            child.color.setHex(0x6a5a4a);
-                        } else if (child instanceof THREE.AmbientLight) {
-                            child.intensity = 0.3;
-                            child.color.setHex(0x4a3a2a);
-                        } else if (child instanceof THREE.HemisphereLight) {
-                            child.intensity = 0.3;
-                            if (child.groundColor) child.groundColor.setHex(0x2a1a0a);
-                            if (child.color) child.color.setHex(0x3a2a1a);
-                        }
-                    });
-                }
-                
-                brightwayPosts.forEach(post => {
-                    post.userData.leds.forEach(led => { led.material.emissiveIntensity = 0.3; });
-                });
-            }, 5000);
+            applyLighting('brightway');
+            
+            console.log('BrightWay activado - Iluminación mejorada');
+        }
+
+        function deactivateBrightWay() {
+            const btn = document.getElementById('brightwayBtn');
+            btn.classList.remove('active');
+            
+            applyLighting('normal');
+            
+            console.log('BrightWay desactivado - Iluminación normal');
+        }
+
+        function jump() {
+            if (gameState.isJumping || !gameState.running || gameState.paused) return;
+            playJumpSound();
+            gameState.isJumping = true;
+            gameState.jumpVelocity = 0.35;
+        }
+
+        function playJumpSound() {
+            if (!soundOn) return;
+            const o = audioCtx.createOscillator();
+            const g = audioCtx.createGain();
+            o.connect(g);
+            g.connect(audioCtx.destination);
+            o.frequency.setValueAtTime(300, audioCtx.currentTime);
+            o.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.2);
+            o.type = 'sine';
+            g.gain.setValueAtTime(0.3 * soundVol, audioCtx.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+            o.start();
+            o.stop(audioCtx.currentTime + 0.2);
         }
 
         function activateShield() {
@@ -2269,7 +2488,7 @@
             }
             
             const shieldInterval = setInterval(() => {
-                if (!gameState.running || !gameState.shieldActive) {
+                if (!gameState.running || gameState.paused || !gameState.shieldActive) {
                     clearInterval(shieldInterval);
                     return;
                 }
@@ -2310,10 +2529,23 @@
             if (keys.left && gameState.carPosition > -4.5) gameState.carPosition -= 0.25;
             if (keys.right && gameState.carPosition < 4.5) gameState.carPosition += 0.25;
             car.position.x += (gameState.carPosition - car.position.x) * 0.12;
-            if (keys.up && gameState.speed < gameState.maxSpeed) gameState.speed += gameState.acceleration;
-            else if (keys.down && gameState.speed > 20) gameState.speed -= gameState.acceleration * 2;
-            else if (!keys.up && !keys.down && gameState.speed < gameState.maxSpeed) gameState.speed += gameState.acceleration * 0.2;
-            gameState.speed = Math.min(Math.max(gameState.speed, 20), gameState.maxSpeed);
+            
+            // Velocidad FIJA en 60 km/h - SIN INCREMENTOS
+            gameState.speed = 60;
+            
+            // Física del salto
+            if (gameState.isJumping) {
+                gameState.jumpHeight += gameState.jumpVelocity;
+                gameState.jumpVelocity -= 0.02; // Gravedad
+                
+                if (gameState.jumpHeight <= 0) {
+                    gameState.jumpHeight = 0;
+                    gameState.jumpVelocity = 0;
+                    gameState.isJumping = false;
+                }
+                
+                car.position.y = gameState.jumpHeight;
+            }
             
             const elapsedTime = gameState.frameCount / 60;
             gameState.obstacleFrequency = Math.max(25, 120 - (elapsedTime * 3));
@@ -2333,10 +2565,10 @@
             }
             
             obstacles.forEach((obstacle, index) => {
-                obstacle.position.z += gameState.speed * 0.05;
+                obstacle.position.z += gameState.speed * 0.04;
                 if (obstacle.userData.wheels) {
                     obstacle.userData.wheels.forEach(wheel => {
-                        wheel.rotation.x += gameState.speed * 0.015;
+                        wheel.rotation.x += gameState.speed * 0.012;
                     });
                 }
                 if (obstacle.position.z > 20) {
@@ -2346,7 +2578,11 @@
                     playScoreSound();
                 }
                 if (Math.abs(obstacle.position.z - car.position.z) < 3 && Math.abs(obstacle.position.x - car.position.x) < 2.2) {
-                    if (gameState.shieldActive) {
+                    if (gameState.isJumping && gameState.jumpHeight > 2) {
+                        // Saltó exitosamente sobre el obstáculo
+                        gameState.score += 500;
+                        playScoreSound();
+                    } else if (gameState.shieldActive) {
                         scene.remove(obstacle);
                         obstacles.splice(index, 1);
                         gameState.score += 500;
@@ -2358,7 +2594,7 @@
             });
             
             shieldPickups.forEach((pickup, index) => {
-                pickup.position.z += gameState.speed * 0.05;
+                pickup.position.z += gameState.speed * 0.04;
                 
                 pickup.userData.rotation += 0.02;
                 pickup.rotation.y = pickup.userData.rotation;
@@ -2393,7 +2629,7 @@
             particles.forEach((particle, index) => {
                 if (gameState.mapType === 'snow') {
                     particle.position.y -= particle.userData.velocity;
-                    particle.position.z += gameState.speed * 0.02;
+                    particle.position.z += gameState.speed * 0.016;
                     if (particle.position.y < 0) {
                         particle.position.y = 80;
                         particle.position.x = (Math.random() - 0.5) * 100;
@@ -2402,7 +2638,7 @@
                 } else if (gameState.mapType === 'volcano') {
                     particle.position.x += particle.userData.velocity.x;
                     particle.position.y += particle.userData.velocity.y;
-                    particle.position.z += particle.userData.velocity.z + gameState.speed * 0.02;
+                    particle.position.z += particle.userData.velocity.z + gameState.speed * 0.016;
                     particle.userData.velocity.y -= 0.015;
                     particle.userData.life++;
                     
@@ -2422,7 +2658,7 @@
                 } else if (gameState.mapType === 'desert') {
                     particle.position.x += particle.userData.velocity.x;
                     particle.position.y += particle.userData.velocity.y;
-                    particle.position.z += gameState.speed * 0.02;
+                    particle.position.z += gameState.speed * 0.016;
                     
                     if (particle.position.x > 30 || particle.position.z > 30) {
                         particle.position.set(
@@ -2435,18 +2671,18 @@
             });
             
             brightwayPosts.forEach(post => {
-                post.position.z += gameState.speed * 0.05;
+                post.position.z += gameState.speed * 0.04;
                 if (post.position.z > 30) post.position.z -= 450;
             });
             scene.children.forEach(child => {
                 if (child.geometry && child.geometry.type === 'BoxGeometry' && child.material.color && child.material.color.getHex() === 0xFFFF00) {
-                    child.position.z += gameState.speed * 0.05;
+                    child.position.z += gameState.speed * 0.04;
                     if (child.position.z > 30) child.position.z -= 500;
                 }
             });
             if (car.userData.wheels) {
                 car.userData.wheels.forEach(wheel => {
-                    wheel.rotation.x += gameState.speed * 0.01;
+                    wheel.rotation.x += gameState.speed * 0.008;
                 });
             }
             
@@ -2458,11 +2694,15 @@
             }
             
             gameState.score += Math.floor(gameState.speed * 0.08);
-            if (gameState.brightwayActive) gameState.score += Math.floor(gameState.speed * 0.12);
+            if (gameState.brightwayActive) {
+                gameState.score += Math.floor(gameState.speed * 0.12);
+            }
+            
+            // Actualizar UI - asegurar que velocidad sea un entero
             document.getElementById('score').textContent = Math.floor(gameState.score);
             document.getElementById('speedValue').textContent = Math.floor(gameState.speed);
-            camera.position.z = car.position.z + 14 + (gameState.speed * 0.025);
-            camera.position.y = 6 + (gameState.speed * 0.012);
+            camera.position.z = car.position.z + 14 + (gameState.speed * 0.02);
+            camera.position.y = 6 + (gameState.speed * 0.01);
             camera.position.x += (car.position.x * 0.15 - camera.position.x) * 0.1;
             camera.lookAt(car.position.x * 0.3, 1, car.position.z - 15);
         }
@@ -2476,74 +2716,175 @@
 
         function endGame() {
             gameState.running = false;
+            gameState.paused = false;
+            
+            // Velocidad FIJA en 60
+            gameState.speed = 60;
+            gameState.maxSpeed = 60;
+            
             playHitSound();
+            
+            // Ocultar controles del juego
+            document.getElementById('gameControls').classList.remove('show');
+            
             const finalScore = Math.floor(gameState.score);
             document.getElementById('finalScore').textContent = finalScore;
+            
             if (finalScore > gameState.highScore) {
                 gameState.highScore = finalScore;
                 document.getElementById('highScore').textContent = finalScore;
                 localStorage.setItem('brightwayHighScore3D', finalScore);
             }
+            
             document.getElementById('gameOverScreen').classList.add('show');
         }
 
-        function restartGame() {
-            document.getElementById('gameOverScreen').classList.remove('show');
-            obstacles.forEach(obstacle => scene.remove(obstacle));
+        function resetGameState() {
+            // Detener el loop de animación primero
+            gameState.running = false;
+            gameState.paused = false;
+            
+            // Desactivar BrightWay completamente antes de limpiar
+            if (gameState.brightwayActive) {
+                gameState.brightwayActive = false;
+                document.getElementById('brightwayBtn').classList.remove('active');
+                
+                // Restaurar iluminación a estado inicial según el mapa
+                if (scene && gameState.mapType) {
+                    if (gameState.mapType === 'city') {
+                        scene.fog.color.setHex(0x0a0a1a);
+                        scene.background.setHex(0x050510);
+                    } else if (gameState.mapType === 'snow') {
+                        scene.fog.color.setHex(0x0a0a1a);
+                        scene.background.setHex(0x0d1117);
+                    } else if (gameState.mapType === 'volcano') {
+                        scene.fog.color.setHex(0x450a0a);
+                        scene.background.setHex(0x1a0505);
+                    } else if (gameState.mapType === 'desert') {
+                        scene.fog.color.setHex(0x1a1410);
+                        scene.background.setHex(0x0f0c09);
+                    }
+                }
+            }
+            
+            // Limpiar completamente todos los objetos
+            obstacles.forEach(obstacle => {
+                if (obstacle.geometry) obstacle.geometry.dispose();
+                if (obstacle.material) {
+                    if (Array.isArray(obstacle.material)) {
+                        obstacle.material.forEach(mat => mat.dispose());
+                    } else {
+                        obstacle.material.dispose();
+                    }
+                }
+                scene.remove(obstacle);
+            });
             obstacles = [];
-            shieldPickups.forEach(pickup => scene.remove(pickup));
+            
+            shieldPickups.forEach(pickup => {
+                if (pickup.geometry) pickup.geometry.dispose();
+                if (pickup.material) {
+                    if (Array.isArray(pickup.material)) {
+                        pickup.material.forEach(mat => mat.dispose());
+                    } else {
+                        pickup.material.dispose();
+                    }
+                }
+                scene.remove(pickup);
+            });
             shieldPickups = [];
+            
+            // Resetear TODOS los valores del estado del juego
             gameState.score = 0;
             gameState.speed = 40;
+            gameState.maxSpeed = 60;
+            gameState.acceleration = 0.5;
             gameState.carPosition = 0;
-            gameState.frameCount = 0;
             gameState.brightwayActive = false;
             gameState.shieldActive = false;
             gameState.shieldTimeLeft = 0;
+            gameState.frameCount = 0;
             gameState.obstacleFrequency = 120;
             gameState.combo = 0;
             gameState.lastPickupTime = 0;
+            gameState.isJumping = false;
+            gameState.jumpHeight = 0;
+            gameState.jumpVelocity = 0;
+            
+            // Resetear controles
+            keys.left = false;
+            keys.right = false;
+            keys.up = false;
+            keys.down = false;
+            keys.space = false;
+            
+            // Resetear UI
             document.getElementById('brightwayBtn').classList.remove('active');
             document.getElementById('shieldIndicator').classList.remove('active', 'warning');
+            document.getElementById('pauseBtn').innerHTML = '⏸ Pausar';
+            document.getElementById('score').textContent = '0';
+            document.getElementById('speedValue').textContent = '40';
+            document.getElementById('shieldTime').textContent = '10';
+            document.getElementById('gameOverScreen').classList.remove('show');
+            document.getElementById('gameControls').classList.remove('show');
+            
+            console.log('Estado del juego reseteado completamente');
+            
             if (shieldMesh) {
                 shieldMesh.visible = false;
                 shieldMesh.material.opacity = 0;
             }
-            car.position.set(0, 0, 0);
-            camera.position.set(0, 6, 14);
             
-            if (gameState.mapType === 'city') {
-                scene.fog.color.setHex(0x0a0a1a);
-                scene.background.setHex(0x050510);
-            } else if (gameState.mapType === 'snow') {
-                scene.fog.color.setHex(0x0a0a1a);
-                scene.background.setHex(0x0d1117);
-            } else if (gameState.mapType === 'volcano') {
-                scene.fog.color.setHex(0x450a0a);
-                scene.background.setHex(0x1a0505);
-            } else if (gameState.mapType === 'desert') {
-                scene.fog.color.setHex(0x1a1410);
-                scene.background.setHex(0x0f0c09);
+            if (car) {
+                car.position.set(0, 0, 0);
+                car.rotation.set(0, 0, 0);
             }
             
-            brightwayPosts.forEach(post => {
-                post.userData.leds.forEach(led => { led.material.emissiveIntensity = 0.3; });
-            });
+            if (camera) {
+                camera.position.set(0, 6, 14);
+                camera.lookAt(0, 1, -10);
+            }
+        }
+
+        function restartGame() {
+            document.getElementById('gameOverScreen').classList.remove('show');
+            
+            // Resetear completamente el estado
+            resetGameState();
+            
+            // Velocidad FIJA en 60
+            gameState.speed = 60;
+            gameState.maxSpeed = 60;
+            
+            // Asegurar que BrightWay esté desactivado
+            gameState.brightwayActive = false;
+            document.getElementById('brightwayBtn').classList.remove('active');
+            
+            // Mostrar controles del juego
+            document.getElementById('gameControls').classList.add('show');
+            
+            // Actualizar UI
+            document.getElementById('speedValue').textContent = '60';
+            document.getElementById('score').textContent = '0';
+            
+            // Reiniciar juego
             gameState.running = true;
             gameState.paused = false;
+            
             animate();
         }
 
         function returnToMenu() {
-            gameState.running = false;
-            obstacles.forEach(obstacle => scene.remove(obstacle));
-            obstacles = [];
-            shieldPickups.forEach(pickup => scene.remove(pickup));
-            shieldPickups = [];
+            // Resetear completamente el estado
+            resetGameState();
+            
+            // Limpiar postes y partículas
             brightwayPosts.forEach(post => scene.remove(post));
             brightwayPosts = [];
             particles.forEach(particle => scene.remove(particle));
             particles = [];
+            
+            // Limpiar renderizador
             if (renderer) {
                 renderer.dispose();
                 scene.traverse(object => {
@@ -2554,19 +2895,36 @@
                     }
                 });
             }
+            
+            // Ocultar modal de juego y pantalla de game over
             document.getElementById('gameModal').classList.remove('active');
             document.getElementById('gameOverScreen').classList.remove('show');
+            
+            // Ocultar controles del juego
+            document.getElementById('gameControls').classList.remove('show');
+            
+            // Mostrar selector de mapas
             document.getElementById('mapSelectorScreen').classList.remove('hidden');
             document.getElementById('carSelectorScreen').classList.add('hidden');
+            
+            // Limpiar selecciones
             document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+            
+            // Resetear UI de botones
             document.getElementById('brightwayBtn').classList.remove('active');
             document.getElementById('shieldIndicator').classList.remove('active', 'warning');
+            document.getElementById('pauseBtn').innerHTML = '⏸ Pausar';
+            
+            // Resetear estado del juego
             gameState.carColor = null;
             gameState.mapType = null;
             gameState.shieldActive = false;
             gameState.shieldTimeLeft = 0;
             gameState.combo = 0;
             gameState.lastPickupTime = 0;
+            gameState.brightwayActive = false;
+            
+            console.log('Regresando al menú principal');
         }
 
         window.addEventListener('resize', () => {
