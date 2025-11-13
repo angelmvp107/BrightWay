@@ -1,7 +1,10 @@
 <html lang="es">
-<head> 
+<head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
     <title>BrightWay - Innovación en Seguridad Vial</title>
     <style>
         * {
@@ -577,11 +580,13 @@
             position: absolute;
             bottom: 15px;
             left: 15px;
+            right: 15px;
             display: none;
             flex-direction: column;
             gap: 0.75rem;
             z-index: 200;
             pointer-events: auto;
+            max-width: 200px;
         }
         
         .game-controls.show {
