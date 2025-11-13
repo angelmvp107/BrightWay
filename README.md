@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -71,6 +72,7 @@
             position: fixed;
             top: 80px;
             right: 20px;
+            left: 20px;
             z-index: 1999;
             background: rgba(10, 10, 10, 0.95);
             padding: 1.5rem;
@@ -78,7 +80,9 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             display: none;
-            min-width: 280px;
+            max-width: 350px;
+            margin-left: auto;
+            margin-right: auto;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
         }
 
