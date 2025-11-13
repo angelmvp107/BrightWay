@@ -1170,7 +1170,7 @@
                 <h4>Controles del Juego</h4>
                 <p><strong>Teclado PC:</strong></p>
                 <p>• <strong>← →</strong> - Mover el auto izquierda/derecha</p>
-                <p>• <strong>W</strong> - Saltar sobre obstáculos</p>
+                <p>• <strong>↑</strong> - Saltar sobre obstáculos</p>
                 <p>• <strong>ESPACIO</strong> - Activar/Desactivar BrightWay (iluminación especial)</p>
                 
                 <h4 style="margin-top: 1.5rem;">Móvil/Táctil:</h4>
@@ -2218,12 +2218,15 @@
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'ArrowLeft') keys.left = true;
                 if (e.key === 'ArrowRight') keys.right = true;
-                if (e.key === 'ArrowUp') keys.up = true;
+                if (e.key === 'ArrowUp') { 
+                    e.preventDefault(); 
+                    keys.up = true;
+                    if (gameState.running && !gameState.paused && !gameState.isJumping) {
+                        jump();
+                    }
+                }
                 if (e.key === 'ArrowDown') keys.down = true;
                 if (e.key === ' ') { e.preventDefault(); keys.space = true; toggleBrightWay(); }
-                if ((e.key === 'w' || e.key === 'W') && gameState.running && !gameState.paused && !gameState.isJumping) {
-                    jump();
-                }
             });
             document.addEventListener('keyup', (e) => {
                 if (e.key === 'ArrowLeft') keys.left = false;
@@ -2875,6 +2878,9 @@
         }
 
         function returnToMenu() {
+            // NO detener la música al salir al menú, solo resetear el estado
+            // stopMusic(); // La música debe seguir sonando
+            
             // Resetear completamente el estado
             resetGameState();
             
@@ -2942,6 +2948,48 @@
                 audioCtx.resume().then(() => { if (musicOn) startMusic(); });
             }
         }, { once: true });
+
+        // Detectar cuando el usuario sale de la app o cambia de pestaña
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                // El usuario salió de la app o cambió de pestaña
+                stopMusic();
+                console.log('App en segundo plano - música detenida');
+            } else {
+                // El usuario regresó a la app
+                if (musicOn && !document.hidden) {
+                    startMusic();
+                    console.log('App activa - música reanudada');
+                }
+            }
+        });
+
+        // Para iOS Safari y otros navegadores móviles
+        window.addEventListener('pagehide', function() {
+            stopMusic();
+            console.log('Página oculta - música detenida');
+        });
+
+        window.addEventListener('pageshow', function() {
+            if (musicOn && !document.hidden) {
+                startMusic();
+                console.log('Página visible - música reanudada');
+            }
+        });
+
+        // Detener música cuando se minimiza la app
+        window.addEventListener('blur', function() {
+            stopMusic();
+            console.log('Ventana perdió foco - música detenida');
+        });
+
+        // Reanudar música cuando se vuelve a la app
+        window.addEventListener('focus', function() {
+            if (musicOn && !document.hidden) {
+                startMusic();
+                console.log('Ventana ganó foco - música reanudada');
+            }
+        });
     </script>
 </body>
 </html>
